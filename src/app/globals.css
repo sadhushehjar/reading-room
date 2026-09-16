@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+/*
+  The gallery, not the journal.
+  --------------------------------------------------------------------------
+  Papers live on white pages under fluorescent light. This room does the
+  opposite: a dark wall so the exhibits are the only lit things, and warm paper
+  cards that read as objects hung on it.
+
+  Two of the colours are borrowed straight from the figure legends in the
+  collection — red is a strong tie, blue is a weak tie — so they are never used
+  as decoration. They only appear where they mean what the papers say they mean.
+  Brass is the lit minute: it marks a detected social interaction, and by
+  extension anything the room considers "on".
+*/
+
+@theme {
+  /* ---- the wall ---- */
+  --color-wall: #0e1218;
+  --color-wall-2: #151b24;
+  --color-wall-3: #1d2632;
+
+  /* ---- the exhibit card ---- */
+  --color-paper: #f5f3ee;
+  --color-paper-2: #e9e6dd;
+
+  /* ---- ink, for type on paper ---- */
+  --color-ink: #14181d;
+  --color-ink-2: #474f57; /* 8.2:1 on paper */
+  --color-ink-3: #666f78; /* 5.1:1 on paper */
+
+  /* ---- chalk, for type on the wall ---- */
+  --color-chalk: #eef1f4;
+  --color-chalk-2: #a6b0bb; /* 7.4:1 on wall */
+  --color-chalk-3: #78838f; /* 4.6:1 on wall */
+
+  /* ---- brass: a lit minute, and every "on" state ---- */
+  --color-brass: #d9a441;
+  --color-brass-2: #f0c672;
+  --color-brass-dim: #6b5121;
+
+  /* ---- data only: the figure legend of every paper in the collection ---- */
+  --color-tie-strong: #d6453f;
+  --color-tie-weak: #4d7fd0;
+
+  --color-line-wall: rgba(238, 241, 244, 0.12);
+  --color-line-wall-2: rgba(238, 241, 244, 0.22);
+  --color-line-paper: rgba(20, 24, 29, 0.14);
+
+  --font-display: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  --font-read: var(--font-read), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --ease-gallery: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-wall);
+    color: var(--color-chalk);
+    font-family: var(--font-read);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-brass) 34%, transparent);
+    color: var(--color-chalk);
+  }
+
+  :where(a, button, [tabindex="0"], summary):focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* the room does not scroll behind an open exhibit */
+  body[data-locked="true"] {
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  .u-shell {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 68px);
+  }
+
+  /* wall label: the small caps line above everything in a museum */
+  .u-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-chalk-3);
+  }
+
+  .u-label-ink {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+
+  /* fine print: credits, DOIs, footnotes. Same mono as a label, but in the
+     case it was written in — a DOI is case-sensitive to read. */
+  .u-fine {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+  }
+
+  .u-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* a card hung on the wall */
+  .u-card {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-radius: 2px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06),
+      0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  }
+
+  .u-panel {
+    background: var(--color-wall-2);
+    border: 1px solid var(--color-line-wall);
+    border-radius: 2px;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+      opacity 0.7s var(--ease-gallery),
+      transform 0.7s var(--ease-gallery);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* hairline that reads as a picture rail */
+  .u-rail {
+    border-top: 1px solid var(--color-line-wall);
+  }
+}
+
+/* the lit minute pulses once when it first appears, then holds */
+@keyframes tick-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
