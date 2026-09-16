@@ -113,7 +113,7 @@ export default function ConnectionMap({
                     : "var(--color-line-wall-2)"
                 }
                 strokeWidth={lit && active ? 1.8 : 1}
-                strokeDasharray={e.kind === "motivates" ? "4 4" : undefined}
+                strokeDasharray={e.kind === "shared-authors" || e.kind === "same-measure" ? "4 4" : undefined}
                 opacity={lit ? 1 : 0.18}
                 style={{ transition: "opacity 300ms, stroke 300ms" }}
               />
@@ -200,9 +200,7 @@ export default function ConnectionMap({
           </div>
         ) : (
           <p className="max-w-[56ch] text-[1.02rem] leading-[1.6] text-chalk-3">
-            Hover or tap any point on the map. Solid lines mean one paper uses
-            another&rsquo;s instrument, cohort or result. Dashed lines mean it
-            only motivated the next one.
+            Hover or tap any point on the map. Solid lines are citations, shared tools and gaps one paper addressed for another. Dashed lines are shared authors or a shared measure.
           </p>
         )}
       </div>

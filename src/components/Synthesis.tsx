@@ -14,7 +14,7 @@ import { PAPERS, COHORTS } from "@/lib/collection";
 
 const VIEWS = [
   { id: "evidence", label: "What it rests on" },
-  { id: "caveats", label: "What none of it proves" },
+  { id: "caveats", label: "Limitations" },
 ] as const;
 
 export default function Synthesis({ onOpen }: { onOpen: (id: string) => void }) {
@@ -36,10 +36,11 @@ export default function Synthesis({ onOpen }: { onOpen: (id: string) => void }) 
           </div>
           <div className="flex flex-col justify-end gap-5">
             <p className="max-w-[52ch] text-[1.04rem] leading-[1.62] text-chalk-2">
-              Ten years of work rests on four cohorts and one review. Reading
-              across the columns shows the load each one carries — and the{" "}
-              <span className="u-num text-chalk">{totalLimits}</span> caveats
-              the authors put in print themselves.
+              Five of the eight papers report their own participants. The other
+              three are a framework, a review and a study protocol. Compare
+              them side by side, or read the{" "}
+              <span className="u-num text-chalk">{totalLimits}</span>{" "}
+              limitations listed for them.
             </p>
             <div className="flex flex-wrap gap-2">
               {VIEWS.map((v) => (

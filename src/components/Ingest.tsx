@@ -72,7 +72,7 @@ function DraftCard({ x }: { x: Extracted }) {
 
       <div className="mt-5 space-y-4 border-t border-line-paper pt-4">
         {x.cohorts.length > 0 && (
-          <Field label="Cohort sizes found">
+          <Field label="Sample sizes found">
             <span className="u-num">{x.cohorts.join("  ·  ")}</span>
           </Field>
         )}
@@ -163,7 +163,7 @@ export default function Ingest() {
             Choose a folder and every PDF in it is opened here, in this tab.
             Nothing is uploaded and nothing leaves the machine. What comes back
             is a draft label for each paper: what it is, how long it runs, the
-            cohort sizes and the numbers worth checking.
+            sample sizes it mentions and the numbers worth checking.
           </p>
         </div>
       </div>
@@ -240,7 +240,7 @@ export default function Ingest() {
 
           <p className="mt-8 max-w-[64ch] border-l-2 border-brass pl-5 text-[1rem] leading-[1.6] text-chalk-2">
             These are draft labels. The page found the structure of each paper —
-            its sections, cohorts, figures and reported numbers. It did not write
+            its sections, sample sizes, figures and reported numbers. It did not write
             the summaries. Every written label in the collection above came from
             reading the paper, and that is still the part a person does.
           </p>

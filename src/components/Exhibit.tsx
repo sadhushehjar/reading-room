@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { byId, type Depth, type Paper } from "@/lib/collection";
+import { byId, LINK_LABEL, type Depth, type Paper } from "@/lib/collection";
 import PaperVisual, { asset } from "./PaperVisual";
 
 /**
@@ -292,7 +292,7 @@ export default function Exhibit({
                 </Section>
               )}
 
-              <Section label="Every limitation the authors named">
+              <Section label="Limitations">
                 <ul className="max-w-[68ch] space-y-3">
                   {paper.limitations.map((l) => (
                     <li key={l} className="flex gap-3 text-[1rem] leading-[1.58] text-ink-2">
@@ -319,7 +319,7 @@ export default function Exhibit({
                           onClick={() => onOpen(c.to)}
                           className="group text-left"
                         >
-                          <span className="u-label-ink">{c.kind.replace("-", " ")}</span>
+                          <span className="u-label-ink">{LINK_LABEL[c.kind]}</span>
                           <span className="mt-1 block font-display text-[1rem] font-600 text-ink underline decoration-line-paper underline-offset-4 group-hover:decoration-ink">
                             {t.year} · {t.title}
                           </span>
@@ -370,7 +370,7 @@ export default function Exhibit({
               onClick={() => setDepth("full")}
               className="w-full border border-line-paper px-6 py-4 font-display text-[0.95rem] font-600 text-ink transition-colors hover:border-ink"
             >
-              Read the full label — numbers, method, every limitation
+              Read the full label: numbers, method and limitations
             </button>
           )}
         </div>

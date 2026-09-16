@@ -23,7 +23,9 @@ function useNetwork(constraint: number) {
   return useMemo(() => {
     const t = (constraint - MIN) / (MAX - MIN); // 0 = open, 1 = closed
 
-    const n = Math.round(9 - 5 * t); // 9 contacts when open, 4 when closed
+    // pinned to the reported averages: 8 contacts at constraint 40 (fast
+    // arrivers) and 5 at constraint 61 (slow arrivers), clamped at the ends
+    const n = Math.min(10, Math.max(3, Math.round(8 - (constraint - 40) / 7)));
     const density = 0.22 + 0.72 * t;
     const strongShare = 0.28 + 0.62 * t;
 
@@ -76,9 +78,8 @@ export default function ConstraintDial() {
       </h3>
       <p className="mt-4 max-w-[58ch] text-[1.02rem] leading-[1.6] text-chalk-2">
         Constraint measures how far the people around you already know each
-        other. Drag it up and the circle tightens, the ties turn strong, and
-        outside opinion stops arriving. Two studies in this collection measured
-        what that does.
+        other. Drag it up and the network closes in. Two studies in this
+        collection report what constraint was linked to.
       </p>
 
       <div className="mt-9 grid gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-center">
@@ -180,20 +181,19 @@ export default function ConstraintDial() {
             <p className="text-[1rem] leading-[1.55] text-chalk-2">
               {closed ? (
                 <>
-                  This is the shape of a{" "}
-                  <span className="text-tie-strong">slow arriver</span>. In 175
-                  stroke patients, those with small close-knit networks waited
-                  past six hours — and{" "}
+                  Close to the average{" "}
+                  <span className="text-tie-strong">slow arriver</span>. In the
+                  2019 study, patients who reached hospital after six hours had
+                  smaller, more close-knit networks, and{" "}
                   <span className="text-chalk">none of them</span> received the
                   clot-dissolving drug.
                 </>
               ) : (
                 <>
-                  This is the shape of a{" "}
-                  <span className="text-brass">fast arriver</span>. Someone in a
-                  network like this was a stranger to the others, had no stake in
-                  waiting, and said go. Half of this group got the clot-dissolving
-                  drug.
+                  Close to the average{" "}
+                  <span className="text-brass">fast arriver</span>, with more
+                  contacts who don&rsquo;t know each other. Half of the patients
+                  who arrived within six hours received the clot-dissolving drug.
                 </>
               )}
             </p>
@@ -212,21 +212,22 @@ export default function ConstraintDial() {
                 {bp > 0 ? `+${bp}` : bp}
               </span>
               <span className="text-[0.98rem] leading-snug text-chalk-2">
-                mmHg systolic, over three months
+                mmHg systolic vs individual counselling
               </span>
             </div>
             <p className="mt-2 text-[0.98rem] leading-[1.5] text-chalk-3">
               {closed
-                ? "Bringing this circle into the room worked. There was slack to take up."
-                : "Bringing this circle into the room backfired. These patients already had the support the session was trying to build."}
+                ? "In the trial's high-constraint subgroup, network counselling went with lower blood pressure than individual counselling."
+                : "In the low-constraint subgroup it went with higher blood pressure. The authors suggest larger, more diverse networks may already confer some benefit, leaving less room to improve."}
             </p>
           </div>
 
           <p className="u-fine text-chalk-3 border-t border-line-wall pt-4  text-chalk-3">
             Anchored on real values: slow arrivers averaged 5 contacts at
             constraint 61, fast arrivers 8 at constraint 40. The blood pressure
-            figures are the trial&rsquo;s two constraint subgroups, p = 0.03. The
-            drawing between those anchors is an illustration, not data.
+            figures are the trial&rsquo;s two constraint subgroups, p = 0.03; the
+            trial split at its own median, and this dial switches at 61. The
+            drawing and the three numbers above are illustrations, not data.
           </p>
         </div>
       </div>

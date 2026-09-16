@@ -13,14 +13,14 @@ interaction after stroke.
 ## What is in it
 
 - **The collection.** Eight papers, each readable at three depths — Glance,
-  Brief and Full — with a picture, key numbers, method steps, every limitation
-  the authors named, and what to read next.
+  Brief and Full — with a picture, key numbers, method steps, limitations,
+  how it connects to the other papers, and what to read next.
 - **Touch exhibits.** A constraint slider tied to the arrival-time and
   blood-pressure findings, and a panel showing SocialBit's accuracy under each
   reported condition.
 - **Your folder.** Choose a folder of PDFs and each one is read in the browser
   with pdf.js. Nothing is uploaded. You get a draft card with the title,
-  authors, venue, DOI, year, cohort sizes, reported statistics and section
+  authors, venue, DOI, year, sample sizes, reported statistics and section
   structure.
 - **Across the collection.** Cohorts, designs and caveats side by side.
 

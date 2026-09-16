@@ -79,26 +79,20 @@ export default function Gallery({ onOpen }: { onOpen: (id: string) => void }) {
   const active = ROUTES.find((r) => r.id === route)!;
   const shown = PAPERS.filter((p) => active.steps.includes(p.id));
   const minutes = shown.reduce((n, p) => n + p.minutes, 0);
+  const pages = shown.reduce((n, p) => n + p.pages, 0);
 
   return (
     <section id="collection" className="u-shell pb-24 pt-16 sm:pt-20">
       <div className="u-rail pt-10">
-        <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
+        <div className="flex flex-col gap-6">
           <div>
-            <span className="u-label">The collection</span>
-            <h2 className="mt-4 text-[clamp(2rem,4.6vw,3.2rem)] font-700">
-              Eight papers,
-              <br />
-              one argument.
-            </h2>
-          </div>
-          <div className="flex flex-col justify-end gap-6">
-            <p className="max-w-[52ch] text-[1.04rem] leading-[1.62] text-chalk-2">
-              They were written over ten years by overlapping groups, and they
-              only make sense in order. Each one names a problem the next one
-              tries to fix. Pick how much time you have.
+            <h2 className="u-label">The collection</h2>
+            <p className="mt-4 max-w-[56ch] text-[1.04rem] leading-[1.62] text-chalk-2">
+              Eight papers by Amar Dhand and collaborators, published between
+              2016 and 2026, in publication order. Pick how much time you have.
             </p>
-
+          </div>
+          <div className="flex flex-col gap-6">
             <div className="flex flex-wrap gap-2">
               {ROUTES.map((r) => (
                 <button
@@ -126,8 +120,8 @@ export default function Gallery({ onOpen }: { onOpen: (id: string) => void }) {
               />
               <span className="font-mono text-[0.74rem] text-chalk-3">
                 {active.blurb} · {shown.length} paper
-                {shown.length === 1 ? "" : "s"} · {minutes} min, against about
-                240 pages of paper.
+                {shown.length === 1 ? "" : "s"} · {minutes} min here, against{" "}
+                {pages} pages in print.
               </span>
             </div>
           </div>

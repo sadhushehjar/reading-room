@@ -102,7 +102,7 @@ export default function MinuteStrip({
             animate
               ? {
                   animation: `tick-in 320ms var(--ease-gallery) both`,
-                  animationDelay: `${i * 9}ms`,
+                  animationDelay: `${Math.round((i * 1800) / ticks.length)}ms`,
                   transformOrigin: "center",
                 }
               : undefined

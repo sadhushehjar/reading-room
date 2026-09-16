@@ -35,7 +35,7 @@ const CONDITIONS: Cond[] = [
     n: 129,
     sens: 0.88, spec: 0.89, bal: 0.88, auc: 0.94,
     reading:
-      "The reference case. Most patients, most of the time, in an ordinary hospital room.",
+      "The comparison group for aphasia: 129 patients.",
   },
   {
     group: "Who is wearing it",
@@ -43,7 +43,7 @@ const CONDITIONS: Cond[] = [
     n: 24,
     sens: 0.82, spec: 0.87, bal: 0.84, auc: 0.93,
     reading:
-      "The point of the whole project. Language impairment costs 6.8% of sensitivity and almost nothing in discrimination — these patients stay measurable.",
+      "Language impairment costs 6.8% of sensitivity and only 1.1% of AUC, so these patients stay measurable.",
   },
   {
     group: "Who is wearing it",
@@ -51,15 +51,15 @@ const CONDITIONS: Cond[] = [
     n: 7,
     sens: 0.73,
     reading:
-      "The hardest case in the study, and the honest floor. When a patient produces almost no speech, there is less for the model to hear.",
+      "The lowest sensitivity for any patient group, from 7 patients. The authors suggest patients with aphasia contribute less speech and have briefer interactions.",
   },
   {
     group: "What else is in the room",
-    label: "Quiet room",
+    label: "No side conversation",
     n: 9252,
     sens: 0.87, spec: 0.92, bal: 0.90, auc: 0.95,
     reading:
-      "No side conversation, no television. This is the model at its best.",
+      "The comparison case for side conversations. Specificity is highest here, at 0.92.",
   },
   {
     group: "What else is in the room",
@@ -67,7 +67,7 @@ const CONDITIONS: Cond[] = [
     n: 4793,
     sens: 0.86, spec: 0.82, bal: 0.84, auc: 0.92,
     reading:
-      "Two nurses talking to each other across the room. Sensitivity barely moves; specificity is what suffers, because the model counts speech that was not aimed at the patient.",
+      "Other people talking nearby. Sensitivity barely moves, but specificity falls to 0.82, so more minutes without interaction are counted as interaction.",
   },
   {
     group: "What else is in the room",
@@ -75,45 +75,47 @@ const CONDITIONS: Cond[] = [
     n: 4907,
     sens: 0.82, spec: 0.89, bal: 0.85, auc: 0.92,
     reading:
-      "The opposite failure. A television makes the model cautious, so it misses real conversation rather than inventing it.",
+      "The paper reports television sound mainly lowers sensitivity, so some real interactions are missed.",
   },
   {
     group: "How deep the conversation is",
-    label: "A greeting",
+    label: "Depth 1, e.g. greetings",
     n: 325,
     sens: 0.55,
     reading:
-      "Depth level 1. Nearly half of the briefest exchanges are missed. There is not enough sound in 'good morning' to be sure.",
+      "The shallowest exchanges; 45% are missed. The authors note shallow interactions such as greetings were harder to detect.",
   },
   {
     group: "How deep the conversation is",
-    label: "Small talk",
+    label: "Depth 2",
     n: 1393,
     sens: 0.79,
-    reading: "Depth level 2. Detection climbs fast once an exchange has turns in it.",
+    reading:
+      "Sensitivity rises with conversational depth.",
   },
   {
     group: "How deep the conversation is",
-    label: "A real conversation",
+    label: "Depth 3",
     n: 3642,
     sens: 0.91,
     reading:
-      "Depth level 3, and the most common kind in the data. Sustained speech is easy to hear.",
+      "The most common depth in the data, with 3,642 samples.",
   },
   {
     group: "How deep the conversation is",
-    label: "A long exchange",
+    label: "Depth 4",
     n: 1001,
     sens: 0.96,
     reading:
-      "Depth level 4. Almost nothing at this length gets past the model.",
+      "The authors note deeper exchanges produce sustained audio features that help detection.",
   },
   {
     group: "Where and on what",
     label: "Acute hospital",
     n: 12227,
     sens: 0.86, spec: 0.88, bal: 0.87, auc: 0.94,
-    reading: "Brigham and Women's. The bulk of the dataset.",
+    reading:
+      "Brigham and Women’s Hospital, 12,227 of the 14,045 samples.",
   },
   {
     group: "Where and on what",
@@ -121,7 +123,7 @@ const CONDITIONS: Cond[] = [
     n: 1818,
     sens: 0.92, spec: 0.88, bal: 0.90, auc: 0.96,
     reading:
-      "Spaulding. Better than the acute ward on every metric, probably because rehabilitation days contain longer, more deliberate conversation.",
+      "Spaulding Rehabilitation Hospital, 1,818 samples. Sensitivity, balanced accuracy and AUC are higher than in the acute hospital; specificity is the same.",
   },
   {
     group: "Where and on what",
@@ -129,7 +131,7 @@ const CONDITIONS: Cond[] = [
     n: 8448,
     sens: 0.87, spec: 0.89, bal: 0.88, auc: 0.94,
     reading:
-      "One of the two watches used. Hardware turns out not to matter, which is what makes the method portable.",
+      "One of two watch models. The paper reports equivalent performance across devices.",
   },
   {
     group: "Where and on what",
@@ -137,7 +139,7 @@ const CONDITIONS: Cond[] = [
     n: 5597,
     sens: 0.87, spec: 0.87, bal: 0.87, auc: 0.94,
     reading:
-      "The other watch, and effectively the same result. Nothing here is tuned to one device.",
+      "The other watch model, with near-identical results.",
   },
   {
     group: "Who is talking",
@@ -145,14 +147,15 @@ const CONDITIONS: Cond[] = [
     n: 907,
     sens: 0.91,
     reading:
-      "The best modality in the study — better than in person. One voice close to the microphone with no competing room.",
+      "The highest sensitivity of the three ways of talking, from 907 samples.",
   },
   {
     group: "Who is talking",
     label: "In person",
     n: 5566,
     sens: 0.87,
-    reading: "The ordinary case, and the one the whole design is built around.",
+    reading:
+      "The most common way of talking in the data, with 5,566 samples.",
   },
   {
     group: "Who is talking",
@@ -160,7 +163,7 @@ const CONDITIONS: Cond[] = [
     n: 210,
     sens: 0.89,
     reading:
-      "Slightly better than English, but from only 210 samples. The paper lists language as a limitation, not a strength.",
+      "Slightly higher than English, but from only 210 samples. The paper lists mostly-English data as a limitation.",
   },
 ];
 

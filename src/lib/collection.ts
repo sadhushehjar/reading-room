@@ -1,11 +1,13 @@
 /**
  * The SocialBit collection.
  *
- * Eight papers, read in order, tell one story: how a decade of social-network
- * research in neurology turned into a smartwatch that can hear whether a stroke
- * patient is alone. Every number here is quoted from the paper it belongs to —
- * this file is the exhibit label, so it has to be as exact as the wall text in
- * a museum.
+ * Eight papers by Amar Dhand and collaborators, published between 2016 and
+ * 2026. This file is the exhibit label, so it holds to one rule: a statement
+ * about a paper is something the paper says. Numbers are quoted from the
+ * paper they belong to, limitations are the authors' own unless a paper has
+ * none (and then the label says so), and every connection between two papers
+ * is a checkable fact — a citation, a shared survey tool or measure, shared
+ * authors, or a gap one paper named and another addressed.
  *
  * `license` decides whether a figure from the paper can be shown on this site.
  * CC BY and CC BY-NC allow it with attribution; "closed" papers are represented
@@ -26,7 +28,7 @@ export type PaperKind =
 export type Stat = {
   value: string;
   label: string;
-  /** shown on the back of the tile — what the number actually means */
+  /** what the number actually means */
   note?: string;
 };
 
@@ -36,17 +38,19 @@ export type Figure = {
   /** what a reader should take away in one look */
   reading: string;
   credit: string;
-  /** portrait figures get a taller frame in the gallery */
-  aspect?: "wide" | "tall";
 };
 
+/** Every kind is a fact that can be checked against the two papers. */
 export type LinkKind =
-  | "builds-on"
-  | "same-instrument"
-  | "same-cohort"
-  | "answers"
-  | "motivates"
-  | "tests";
+  | "cites"
+  | "cited-by"
+  | "same-tool"
+  | "same-measure"
+  | "shared-authors"
+  | "protocol-for"
+  | "results-of"
+  | "gap-named"
+  | "gap-addressed";
 
 export type Connection = {
   to: string;
@@ -62,11 +66,11 @@ export type ReadNext = {
 
 export type Paper = {
   id: string;
-  /** position on the spine, 1-8 */
+  /** position in publication order, 1-8 */
   step: number;
   year: number;
   kind: PaperKind;
-  /** the job this paper does in the arc, two or three words */
+  /** the job this paper does in the collection, two or three words */
   role: string;
   title: string;
   authors: string;
@@ -76,10 +80,12 @@ export type Paper = {
   doi: string;
   url: string;
   license: "cc-by" | "cc-by-nc" | "cc-by-nc-nd" | "closed";
+  /** page count of the published PDF */
+  pages: number;
   /** minutes to read this exhibit at full depth */
   minutes: number;
 
-  /** GLANCE — one sentence you could say out loud in a lab meeting */
+  /** GLANCE — one or two sentences you could say out loud in a lab meeting */
   glance: string;
   /** the single number that carries the paper */
   headline: Stat;
@@ -103,10 +109,6 @@ export type Paper = {
   tags: string[];
 };
 
-export const COLLECTION_TITLE = "SocialBit";
-export const COLLECTION_SUB =
-  "How ten years of social-network research in neurology became a watch that can hear whether you are alone.";
-
 export const PAPERS: Paper[] = [
   {
     id: "theory-2016",
@@ -121,48 +123,52 @@ export const PAPERS: Paper[] = [
     doi: "10.1038/nrneurol.2016.119",
     url: "https://doi.org/10.1038/nrneurol.2016.119",
     license: "closed",
+    pages: 8,
     minutes: 4,
     glance:
-      "Neurology treats the patient as a solitary figure. This paper argues the patient is a node in a network, and hands the field the vocabulary to measure it.",
+      "Clinicians are taught to see the patient as a solitary figure. This paper argues every patient sits inside a social network, and sets out how to measure it.",
     headline: {
       value: "≈ smoking",
-      label: "how much social isolation raises health risk",
-      note: "Isolation sits alongside high blood pressure, high cholesterol and physical inactivity as a determinant of poor health.",
+      label: "how strongly social isolation is tied to poor health",
+      note: "The paper puts isolation alongside smoking, high blood pressure, high cholesterol and physical inactivity as a determinant of poor health.",
     },
     question:
-      "Clinicians already talk to a patient's family every day, but nothing about that social world is recorded or acted on. Could it be measured the way blood pressure is?",
+      "Neurologists deal with a patient's family and friends all the time, yet the patient's social life is barely screened. Can that social world be mapped and used in research and care?",
     method:
-      "A conceptual framework rather than a study. It imports personal-network analysis from sociology and defines the survey that produces it: a name generator, a name inter-relater and a name interpreter.",
+      "A framework rather than a study. It brings personal-network analysis into neurology and describes the survey that produces a network map: a name generator, a name inter-relater and a name interpreter.",
     finding:
-      "Two patients with the same diagnosis can sit in opposite social structures. One is ringed by four strongly tied relatives; the other has five loosely connected contacts. Density, constraint and effective size make that difference a number.",
+      "Two stroke patients can sit in very different social structures. One is surrounded by four closely tied relatives; the other has five contacts, several of whom don't know each other. Density, constraint and effective size turn that difference into numbers.",
     caveat:
-      "It proposes an agenda; it does not test one. Everything downstream in this collection exists because this paper had no data of its own.",
+      "It proposes an agenda without testing one. The authors also say the network lens should be used alongside traditional clinical and epidemiological approaches, not instead of them.",
     stats: [
-      { value: "3", label: "survey sections", note: "Name generator lists the people. Name inter-relater asks how they know each other. Name interpreter asks who they are and how they live." },
-      { value: "5", label: "pathways from network to health", note: "Person-to-person contact, social engagement, social influence, access to resources, and social support." },
-      { value: "1.0 vs 0.6", label: "density, patient 1 vs patient 2", note: "Density is observed ties divided by all possible ties. A value of 1.0 means everyone around the patient knows everyone else." },
+      { value: "3", label: "survey sections", note: "The name generator lists the people. The name inter-relater asks how they know each other. The name interpreter asks who they are and what health habits they have." },
+      { value: "5", label: "pathways from network to health", note: "Person-to-person contact, social engagement, social influence, access to resources and material goods, and social support." },
+      { value: "1.0 vs 0.6", label: "density, patient 1 vs patient 2", note: "Density is the observed ties between contacts divided by all possible ties. At 1.0, everyone around the patient knows everyone else." },
     ],
     procedure: [
-      { label: "Borrow", detail: "Personal-network (egocentric) analysis is taken from graph theory and sociology, where the patient is the ego and each contact is an alter." },
-      { label: "Define", detail: "Structure is measured by size, density, constraint and effective size. Composition is measured by who the alters are and what habits they keep." },
-      { label: "Instrument", detail: "Questions are adapted from the General Social Survey so answers can be compared to population norms." },
-      { label: "Propose", detail: "An agenda: map networks across neurological disorders, test whether they predict outcomes, then try to change them." },
+      { label: "Borrow", detail: "Personal-network (egocentric) analysis comes from graph theory and sociology. The patient is the ego and each contact is an alter." },
+      { label: "Define", detail: "Structure is measured by size, density, constraint and effective size. Composition is measured by who the contacts are and what health habits they have." },
+      { label: "Instrument", detail: "Example questions are adapted from validated items in the General Social Survey, a national population survey." },
+      { label: "Propose", detail: "An agenda: map networks in neurological disorders, test whether they relate to outcomes, then test network interventions." },
     ],
     limitations: [
-      "No cohort, no outcome data — the framework is argued, not demonstrated.",
-      "The survey is long enough to be impractical at the bedside without a tool to carry it.",
-      "It assumes patients can self-report their own social world, which excludes exactly the patients most likely to be isolated.",
+      "As a middle-level theory, the network view plays down individual agency — the idea that a person decides and acts regardless of context.",
+      "Networks are not enough to model broader social and historical forces such as poverty or racism; those need community- and population-level study.",
+      "Networks put human actors ahead of technologies, animals and objects that can also affect health.",
+      "Some of these forces are beyond the reach of an individual neurologist.",
+      "More research is needed on designing and running network interventions in clinical populations.",
     ],
     soWhat:
-      "Every later paper in this collection is either building the instrument this one specified, or working around the self-report assumption it took for granted.",
+      "Later papers build on it directly: the 2018 survey tool, the 2019 arrival study and the 2025 trial all cite it.",
     figures: [],
     connections: [
-      { to: "instrument-2018", kind: "motivates", why: "The survey specified here is what gets built into a scalable web tool two years later." },
-      { to: "gaps-2022", kind: "motivates", why: "The research agenda proposed here is audited and updated in the 2022 review." },
+      { to: "instrument-2018", kind: "cited-by", why: "The 2018 paper cites this framework, and its survey tool follows the same generator, inter-relater and interpreter design." },
+      { to: "arrival-2019", kind: "cited-by", why: "The arrival study cites this framework." },
+      { to: "trial-2025", kind: "cited-by", why: "The trial cites this paper's social network theory of patients as the basis for its intervention." },
     ],
     readNext: [
-      { to: "instrument-2018", why: "See the survey turned into something 1,493 people could actually complete." },
-      { to: "gaps-2022", why: "Skip ahead if you want the mechanism — why the brain is sensitive to the social environment at all." },
+      { to: "instrument-2018", why: "See the survey turned into a web tool that 1,493 people completed." },
+      { to: "trial-2025", why: "See the network theory put to a randomised test." },
     ],
     tags: ["personal networks", "constraint", "framework", "stroke"],
   },
@@ -172,7 +178,7 @@ export const PAPERS: Paper[] = [
     step: 2,
     year: 2018,
     kind: "Instrument",
-    role: "Builds the ruler",
+    role: "Builds the survey tool",
     title:
       "A scalable online tool for quantitative social network assessment reveals potentially modifiable social environmental risks",
     authors:
@@ -182,61 +188,63 @@ export const PAPERS: Paper[] = [
     doi: "10.1038/s41467-018-06408-6",
     url: "https://doi.org/10.1038/s41467-018-06408-6",
     license: "cc-by",
+    pages: 9,
     minutes: 5,
     glance:
-      "The survey becomes a web tool, and 1,493 people fill it in. The surprise: who surrounds you predicts your disability better than how they are arranged.",
+      "The survey becomes a web tool that 1,493 people complete. Who surrounds a person was more strongly associated with their disability than how the network was arranged.",
     headline: {
       value: "1,493",
       label: "personal networks mapped",
-      note: "Participants in the GEMS cohort, all first-degree relatives of someone with multiple sclerosis.",
+      note: "Participants in the GEMS cohort, people with a first-degree family history of multiple sclerosis.",
     },
     question:
-      "Can a full personal-network survey be run at clinical-trial scale, and if it can, does anything in the resulting network actually track with how disabled a person is?",
+      "Can a full personal-network survey run at the scale of a clinical study, and does anything in the resulting networks relate to how disabled a person is?",
     method:
-      "A 48-question adaptive survey on REDCap, HIPAA-compliant, about 10 to 15 minutes to finish. It was sent to the GEMS cohort of people at elevated risk of multiple sclerosis. Disability was self-reported on the MSRS-R.",
+      "An adaptive survey of about 48 questions on REDCap, HIPAA-compliant, taking 10 to 15 minutes. It was sent to the GEMS cohort of people at risk of multiple sclerosis. Disability was self-reported on the MSRS-R.",
     finding:
-      "Composition beat structure. The percentage of a person's contacts who skip their own doctor's appointments was strongly associated with that person's disability. Network size and density were not.",
+      "Network composition was associated with disability; network structure as a whole was not (p = 0.066). The strongest single variable was the share of a person's contacts who don't go to their doctor's appointments.",
     caveat:
-      "Cross-sectional. Whether unhealthy contacts make you worse, or being worse changes who stays around you, this design cannot say.",
+      "The study is cross-sectional, so it cannot show causality or direction.",
     stats: [
-      { value: "7.4 × 10⁻⁸", label: "p, contacts who skip the doctor", note: "The strongest single variable against MSRS-R disability. False discovery rate 9.6 × 10⁻⁷." },
-      { value: "p = 0.066", label: "network structure, combined", note: "Size, density, constraint and effective size together did not reach significance. Composition did, at p < 0.0001." },
-      { value: "8", label: "people in an average network", note: "And they were densely connected — 67% of all possible ties between them were present." },
-      { value: "44%", label: "of contacts were family", note: "38% were named as supportive. Sex diversity was 0.89, close to an even mix. Race diversity was 0." },
-      { value: "10–15 min", label: "to complete", note: "48 questions, adapting to the answers given. Short enough to bolt onto a clinical study." },
+      { value: "7.4 × 10⁻⁸", label: "p, contacts who don't go to the doctor", note: "The strongest single variable against MSRS-R disability, with a false discovery rate of 9.6 × 10⁻⁷." },
+      { value: "p = 0.066", label: "network structure, combined", note: "Size, density, constraint and related measures together did not reach significance. Composition did, at p < 0.0001." },
+      { value: "8", label: "people in an average network", note: "They were densely connected: 67% of all possible ties between them were present." },
+      { value: "44%", label: "of contacts were family", note: "38% were supportive of the participant. Sex diversity was 0.89, close to an even mix. Race diversity was 0." },
+      { value: "10–15 min", label: "to complete", note: "About 48 questions that adapt to the answers given." },
     ],
     procedure: [
-      { label: "Generate names", detail: "Three prompts — who did you discuss important matters with, socialise with, and get support from in the last three months. No cap on how many people could be named." },
-      { label: "Relate names", detail: "For the first ten people named, every pair is rated a stranger, a weak tie or a strong tie." },
-      { label: "Interpret names", detail: "For each of those ten: demographics, relationship type, and four health habits — smoking, exercise, medication adherence, attending appointments." },
-      { label: "Analyse", detail: "Structure and composition metrics are regressed against MSRS-R disability, with a permutation-based omnibus test across each category." },
+      { label: "Generate names", detail: "Three prompts: who did you discuss important matters with, socialise with, and get support from in the last three months. There was no cap on how many people could be named." },
+      { label: "Relate names", detail: "For the first ten people named, each pair is rated as strangers, a weak tie or a strong tie." },
+      { label: "Interpret names", detail: "For each of those ten: demographics, relationship, and health habits — smoking, exercise, seeing doctors regularly, and taking prescribed medication." },
+      { label: "Analyse", detail: "Structure and composition measures are tested against MSRS-R disability, with a permutation-based omnibus test for each category." },
     ],
     limitations: [
-      "Cross-sectional, so causality and direction are both out of reach.",
-      "MSRS-R scores clustered low because most of the cohort was asymptomatic, which risks a floor effect.",
-      "Only 115 participants had an MS diagnosis, likely underpowering the comparison against the 1,378 asymptomatic ones.",
-      "Networks were self-reported, and the cohort was recruited through advocacy groups and social media, so it may not generalise.",
+      "The design is cross-sectional, so causality and direction cannot be established.",
+      "MSRS-R scores clustered low because most of the cohort had no symptoms, which risks a floor effect.",
+      "Only 115 participants had an MS diagnosis, so the comparison with the 1,378 without symptoms may be underpowered.",
+      "Unmeasured confounders could affect both network reports and disability.",
+      "Networks were self-reported, and participants were recruited through advocacy groups, social media and electronic communications.",
     ],
     soWhat:
-      "It moved the target. If the health habits of the people around you matter more than the shape of the network, then a network intervention should be aimed at the people, not the wiring.",
+      "The authors suggest interventions aimed at network composition — the people around a patient and their habits — rather than network shape alone.",
     figures: [
       {
         src: "figures/montage-1493.png",
         alt: "A grid of 1,493 small network diagrams, each a black dot for the participant ringed by white dots for their contacts, joined by red strong ties and blue weak ties, arranged from smallest network at top left to largest at bottom right.",
         reading:
-          "Every small shape is one person's entire social world. Read left to right, top to bottom: networks grow from a single tie to dense knots of twenty. Red lines are strong ties, blue are weak.",
+          "Each small shape is one participant's network. They run from the smallest at top left to the largest at bottom right. Red lines are strong ties and blue lines are weak ties.",
         credit: "Dhand et al., Nature Communications 2018, Fig. 2. CC BY 4.0.",
-        aspect: "wide",
       },
     ],
     connections: [
-      { to: "theory-2016", kind: "builds-on", why: "Implements the three-part survey the framework paper specified." },
-      { to: "arrival-2019", kind: "same-instrument", why: "The same tool is turned on stroke patients to study how fast they reached hospital." },
-      { to: "recovery-2019", kind: "same-instrument", why: "And again, longitudinally, to follow recovery over six months." },
+      { to: "theory-2016", kind: "cites", why: "Cites the 2016 framework, and follows its generator, inter-relater and interpreter design." },
+      { to: "arrival-2019", kind: "cited-by", why: "The arrival study cites this tool." },
+      { to: "recovery-2019", kind: "cited-by", why: "The recovery study cites this tool for its network mapping." },
+      { to: "trial-2025", kind: "cited-by", why: "The trial cites this tool and reports the same network measures: size, density, constraint and effective size." },
     ],
     readNext: [
-      { to: "arrival-2019", why: "The same instrument, now with a hard outcome: did the patient get to hospital in time." },
-      { to: "trial-2025", why: "Jump to the trial that tried to change network composition, and what happened." },
+      { to: "arrival-2019", why: "Network measures meet a hard outcome: reaching hospital in time for treatment." },
+      { to: "recovery-2019", why: "The same kind of mapping, repeated over six months after stroke." },
     ],
     tags: ["REDCap", "multiple sclerosis", "composition", "GEMS"],
   },
@@ -246,7 +254,7 @@ export const PAPERS: Paper[] = [
     step: 3,
     year: 2019,
     kind: "Cohort study",
-    role: "Finds the mechanism",
+    role: "Links networks to delay",
     title: "Social networks and risk of delayed hospital arrival after acute stroke",
     authors:
       "Amar Dhand, Douglas Luke, Catherine Lang, Michael Tsiaklides, Steven Feske, Jin-Moo Lee",
@@ -255,65 +263,67 @@ export const PAPERS: Paper[] = [
     doi: "10.1038/s41467-019-09073-5",
     url: "https://doi.org/10.1038/s41467-019-09073-5",
     license: "cc-by",
+    pages: 8,
     minutes: 5,
     glance:
-      "Patients surrounded by a small, tight circle of people who all know each other arrived at hospital late — and none of them got the clot-busting drug.",
+      "Stroke patients who reached hospital late had smaller, more close-knit networks than those who arrived early — and none of the late arrivers received the clot-dissolving drug.",
     headline: {
       value: "0% vs 50%",
-      label: "received clot-dissolving treatment",
-      note: "None of the 67 slow arrivers were given tissue plasminogen activator. Half the 108 fast arrivers were. The drug is only given within 4.5 hours.",
+      label: "received clot-dissolving treatment, late vs early arrivers",
+      note: "None of the 67 slow arrivers received tissue plasminogen activator; 54 of the 108 fast arrivers did. The drug is given only within 4.5 hours of stroke.",
     },
     question:
-      "In cardiac emergencies, being surrounded by family paradoxically slows you down. Does the same hold in stroke, and if so, what is the mechanism?",
+      "In heart attacks, being surrounded by spouses or family has been linked to arriving later. Does the social environment play the same role in stroke?",
     method:
-      "175 patients with acute ischaemic stroke were split by arrival time — 108 within 6 hours, 67 after. Their personal networks were mapped with the 2018 tool and compared on Burt's social capital measures.",
+      "175 patients with acute ischaemic stroke were split by arrival time: 108 within 6 hours of symptom onset and 67 after. Their personal networks were mapped with a survey adapted from the General Social Survey and compared on Burt's social capital measures.",
     finding:
-      "Slow arrivers had smaller networks, averaging 5 people against 8, and much higher constraint, 61 against 40. A closed circle of people who all know each other produces no outside opinion, so the group elects to watch and wait.",
+      "Slow arrivers had smaller networks, 5 people against 8, and higher constraint, 61 against 40, independent of demographic, clinical and socioeconomic factors. The authors conclude that closed networks limited outside perspectives, so patients and close confidants chose to watch and wait.",
     caveat:
-      "The cohort was 88% mild stroke, chosen because mild symptoms are themselves a risk for delay. Whether network structure still matters in severe stroke is untested.",
+      "Most patients had mild stroke. Because severity itself predicts arrival time, the authors note networks may not matter as much in moderate or severe stroke.",
     stats: [
-      { value: "5 vs 8", label: "network size, slow vs fast", note: "Median 5 (IQR 4–8) for slow arrivers against 8 (IQR 6–10) for fast. p < 0.0001." },
-      { value: "61 vs 40", label: "constraint, slow vs fast", note: "Constraint measures how far the patient's contacts are tied to each other. Higher means a more closed, redundant circle. p < 0.0001." },
-      { value: "175", label: "patients enrolled", note: "108 arrived within 6 hours of symptom onset, 67 after." },
-      { value: "80%", label: "of strokes happen in front of someone", note: "And bystanders place roughly 96% of stroke emergency calls, which is why arrival is a group decision, not an individual one." },
+      { value: "5 vs 8", label: "network size, slow vs fast", note: "Slow arrivers averaged 5 (IQR 4–8) and fast arrivers 8 (IQR 6–10). p < 0.0001." },
+      { value: "61 vs 40", label: "constraint, slow vs fast", note: "Constraint measures how far a patient's contacts are tied to each other. Higher means a more closed network. p < 0.0001." },
+      { value: "175", label: "patients enrolled", note: "108 arrived within 6 hours of symptom onset and 67 after. 88% had mild stroke." },
+      { value: "80%", label: "of strokes happen in the presence of others", note: "The paper also cites that caregivers or witnesses place about 96% of stroke emergency calls." },
     ],
     procedure: [
-      { label: "Split", detail: "Arrival within 6 hours of symptom onset counted as fast; anything later, slow." },
-      { label: "Map", detail: "Each patient's personal network was elicited during hospitalisation with the same three-part survey." },
-      { label: "Measure", detail: "Burt's measures — size, constraint, effective size and mean degree — quantify whether the circle is closed or radial." },
-      { label: "Adjust", detail: "Multivariable regression controlled for demographic, clinical and socioeconomic factors." },
+      { label: "Split", detail: "Arrival within 6 hours of symptom onset counted as fast; later than 6 hours, slow." },
+      { label: "Map", detail: "Each patient's personal network was surveyed during the hospital stay." },
+      { label: "Measure", detail: "Burt's measures — size, constraint, effective size and mean degree — describe whether a network is closed or open." },
+      { label: "Adjust", detail: "Multivariable regression accounted for demographic, clinical and socioeconomic factors." },
     ],
     limitations: [
       "Unmeasured confounders could still explain the difference in arrival time.",
-      "Almost everyone had mild stroke, so the finding may not transfer to moderate or severe presentations.",
-      "Patients who could not do the interview — non-English speakers, severe stroke, aphasia — were excluded, which is a selection bias in a study about who gets help.",
-      "Knowledge of stroke symptoms was never measured, and it could be either a confounder or the mechanism itself.",
+      "The cohort was mostly mild stroke, so networks may matter less in moderate or severe stroke.",
+      "The authors note possible selection bias from the small number of slow arrivers and from excluding patients who could not do the survey, such as non-English speakers and patients with severe stroke or aphasia.",
+      "Knowledge of stroke symptoms was not assessed, though it could be a covariate or a mechanism.",
     ],
     soWhat:
-      "It gives constraint a clinical meaning. A closed network is not merely a description; it is a measurable risk factor for missing the treatment window.",
+      "In this cohort, a closed network went with arriving too late for treatment.",
     figures: [
       {
         src: "figures/montage-slow.png",
         alt: "Sixty-seven small network diagrams for patients who arrived at hospital late, arranged from high constraint at the top to low constraint at the bottom.",
         reading:
-          "Slow arrivers, sorted by constraint. Look at the top rows: triangles and squares, drawn almost entirely in red strong ties. Small circles where everyone already knows everyone.",
+          "Slow arrivers, sorted by constraint from high at the top to low at the bottom. The top rows are small networks drawn mostly in red strong ties.",
         credit: "Dhand et al., Nature Communications 2019, Fig. 2a. CC BY 4.0.",
       },
       {
         src: "figures/montage-fast.png",
-        alt: "One hundred and eight small network diagrams for patients who arrived at hospital within six hours, showing larger and more open networks with more blue weak ties.",
+        alt: "One hundred and eight small network diagrams for patients who arrived at hospital within six hours, sorted by constraint.",
         reading:
-          "Fast arrivers, same scale. The grid runs deeper and the shapes get bigger and spikier, with far more blue weak ties reaching outward. Someone in these networks was a stranger to the others — and said go.",
+          "Fast arrivers on the same scale. The authors describe these networks as having lower constraint than the slow arrivers' in general.",
         credit: "Dhand et al., Nature Communications 2019, Fig. 2b. CC BY 4.0.",
       },
     ],
     connections: [
-      { to: "instrument-2018", kind: "same-instrument", why: "Uses the web-based network survey built in the 2018 paper." },
-      { to: "trial-2025", kind: "motivates", why: "Constraint turns out to be the variable that predicts who responds to a network intervention." },
+      { to: "theory-2016", kind: "cites", why: "Cites the 2016 framework." },
+      { to: "instrument-2018", kind: "cites", why: "Cites the 2018 network assessment tool." },
+      { to: "trial-2025", kind: "same-measure", why: "Both report constraint, and in both it separates the patients: slow from fast arrivers here, and responders from non-responders in the trial." },
     ],
     readNext: [
-      { to: "recovery-2019", why: "Same year, same instrument, but following what happens to the network after the stroke." },
-      { to: "trial-2025", why: "Constraint reappears here as the one thing that predicted who the intervention helped." },
+      { to: "recovery-2019", why: "Published the same year: what happens to patients' networks in the six months after stroke." },
+      { to: "trial-2025", why: "Constraint again, this time splitting the results of a randomised trial." },
     ],
     tags: ["stroke", "constraint", "tPA", "time to treatment"],
   },
@@ -323,7 +333,7 @@ export const PAPERS: Paper[] = [
     step: 4,
     year: 2019,
     kind: "Cohort study",
-    role: "Follows the change",
+    role: "Follows networks over time",
     title: "Social Network Mapping and Functional Recovery Within 6 Months of Ischemic Stroke",
     authors:
       "Amar Dhand, Catherine E. Lang, Douglas A. Luke, Angela Kim, Karen Li, Liam McCafferty, Yi Mu, Bernard Rosner, Steven K. Feske, Jin-Moo Lee",
@@ -332,50 +342,51 @@ export const PAPERS: Paper[] = [
     doi: "10.1177/1545968319872994",
     url: "https://doi.org/10.1177/1545968319872994",
     license: "closed",
+    pages: 11,
     minutes: 4,
     glance:
-      "In the six months after a stroke, networks shrink and close around family — but they also get healthier. Only the size you started with predicted physical function.",
+      "In the six months after a stroke, networks shrank and became denser and more family-oriented, but also healthier. Of the network measures, only baseline size was independently linked to physical function.",
     headline: {
       value: "−1.25 people",
       label: "average network change over 6 months",
-      note: "Networks contracted, grew denser and became more family-oriented. They also shed contacts who smoked or did not exercise.",
+      note: "Networks also became denser and more family-oriented, and shed contacts who smoked or did not exercise.",
     },
     question:
-      "Social networks change after a major illness. Does that change help or hurt physical recovery, and which part of the network matters?",
+      "How do patients' social networks change after a stroke, and are they related to physical function at 3 and 6 months?",
     method:
-      "172 patients with mostly mild ischaemic stroke were mapped at baseline and followed to 3 and 6 months, with 149 and 139 retained. Physical function was measured on the PROMIS Physical Function scale.",
+      "172 patients with mostly mild ischaemic stroke had their networks mapped with a quantitative network assessment tool, with 149 followed to 3 months and 139 to 6 months. Physical function was measured on the NIH PROMIS Physical Function scale.",
     finding:
-      "Baseline network size — not density, not the health habits inside the network — was independently associated with physical function at both 3 and 6 months. Patients in small kin-based networks reported more negative social interactions.",
+      "Baseline network size — not density, and not the health habits in the network — was independently associated with physical function at 3 and 6 months. Patients in small, family-based networks reported more negative social interactions.",
     caveat:
-      "Patients with aphasia were excluded, because the study depended on self-report. That is precisely the group most at risk of social network decay.",
+      "Patients with aphasia were excluded because the study relied on self-report. The authors call them a group vulnerable to network decay.",
     stats: [
-      { value: "172", label: "patients mapped at baseline", note: "149 retained at 3 months and 139 at 6 months. Median NIH Stroke Scale of 2 — mostly mild, motor-predominant stroke." },
-      { value: "size", label: "the only independent predictor", note: "Baseline network size held against demographics, socioeconomic status, clinical characteristics, comorbidities, cognition and depression. Density and network health habits did not." },
-      { value: "healthier", label: "what the network became", note: "Ties to people who smoked or did not exercise were pruned over the six months, even as the network shrank." },
+      { value: "172", label: "patients mapped at baseline", note: "149 retained at 3 months and 139 at 6 months. Median NIH Stroke Scale score of 2: mostly mild, motor-predominant stroke." },
+      { value: "size", label: "the network measure that held up", note: "Baseline network size stayed associated with physical function after adjusting for demographics, socioeconomic status, clinical characteristics, comorbidities, cognition and depression. Density and network health habits did not." },
+      { value: "healthier", label: "how network composition changed", note: "Ties to people who smoked or did not exercise were pruned over the six months." },
     ],
     procedure: [
-      { label: "Enrol", detail: "Patients with ischaemic stroke, mapped during hospitalisation with the quantitative network tool." },
-      { label: "Follow", detail: "Networks re-mapped at 3 and 6 months, so change within a person could be measured rather than inferred." },
-      { label: "Model", detail: "Mixed-effects models for network change over time; multivariable models for the association with PROMIS physical function." },
-      { label: "Adjust", detail: "Controlled for demographics, socioeconomic status, stroke severity, comorbidity, cognition and depression." },
+      { label: "Enrol", detail: "Patients with ischaemic stroke had their networks mapped with a quantitative network assessment tool." },
+      { label: "Follow", detail: "Networks were mapped again at 3 and 6 months, so change could be measured within each person." },
+      { label: "Model", detail: "Mixed-effects models for network change over time; multivariable models for the link with PROMIS physical function." },
+      { label: "Adjust", detail: "Adjusted for demographics, socioeconomic status, clinical characteristics, comorbidities, cognition and depression." },
     ],
     limitations: [
-      "Limited to mild ischaemic stroke; moderate, severe, haemorrhagic and recurrent stroke were not studied.",
-      "Aphasia was excluded outright because the design relied on patients reporting their own networks.",
-      "Non-English speakers were not included.",
-      "Attrition was non-random in principle, and missing data in a longitudinal analysis is a validity threat even though completers and non-completers looked alike.",
+      "Limited generalisability: the study focused on mild ischaemic stroke, not moderate or severe stroke, haemorrhage or prior stroke.",
+      "Patients with aphasia and non-English speakers were not included; the authors suggest caregiver proxies or social sensors independent of self-report for future studies.",
+      "Unmeasured confounders may have contributed to the findings.",
+      "Non-random missing data is a threat in longitudinal analysis; completers and non-completers looked similar, but attrition bias is possible.",
     ],
     soWhat:
-      "This is the paper that names the blind spot. A self-report instrument cannot see the patients who cannot speak — and it says so, suggesting caregiver proxies or social sensors as the way out.",
+      "It names a gap the SocialBit work later addresses: patients with aphasia can't be measured by self-report, and the authors point to social sensors as one option.",
     figures: [],
     connections: [
-      { to: "instrument-2018", kind: "same-instrument", why: "The same network survey, run longitudinally instead of once." },
-      { to: "protocol-2023", kind: "motivates", why: "Its exclusion of aphasia is the explicit gap the SocialBit study sets out to close." },
-      { to: "validation-2026", kind: "motivates", why: "The call for 'social sensors independent of self-report' is answered here." },
+      { to: "instrument-2018", kind: "cites", why: "Cites the 2018 network assessment tool." },
+      { to: "protocol-2023", kind: "gap-addressed", why: "This study excluded patients with aphasia. The SocialBit protocol is designed for stroke survivors with speech, cognitive and physical deficits." },
+      { to: "validation-2026", kind: "gap-addressed", why: "This study suggested social sensors independent of self-report. The 2026 study validates one in 153 patients, 24 of them with aphasia." },
     ],
     readNext: [
-      { to: "gaps-2022", why: "The review that takes this gap seriously and starts assembling a sensing team." },
-      { to: "validation-2026", why: "Go straight to the sensor that measures the patients this study had to exclude." },
+      { to: "protocol-2023", why: "The study designed to include the patients this one had to leave out." },
+      { to: "validation-2026", why: "The results of that study." },
     ],
     tags: ["stroke recovery", "PROMIS", "aphasia gap", "longitudinal"],
   },
@@ -385,7 +396,7 @@ export const PAPERS: Paper[] = [
     step: 5,
     year: 2022,
     kind: "Review",
-    role: "Assembles the team",
+    role: "Makes the case for sensing",
     title: "Leveraging Social Networks for the Assessment and Management of Neurological Patients",
     authors:
       "Amar Dhand, Archana Podury, Niteesh Choudhry, Shrikanth Narayanan, Min Shin, Matthias R. Mehl",
@@ -394,51 +405,50 @@ export const PAPERS: Paper[] = [
     doi: "10.1055/s-0042-1744532",
     url: "https://doi.org/10.1055/s-0042-1744532",
     license: "cc-by-nc-nd",
+    pages: 13,
     minutes: 5,
     glance:
-      "The review that turns a neurology problem into an engineering one. Read the author list: a signal processing lab, a computer vision lab and a psychology lab have joined.",
+      "A review of how to measure and use patients' social networks. It notes that many stroke patients can't complete questionnaires and turns to passive sensing. Three of its authors later co-author the SocialBit papers.",
     headline: {
       value: "81% vs 3%",
-      label: "social factors vs clinical care, in shaping health outcomes",
-      note: "In one nation-wide study, socioeconomic factors and health behaviours accounted for 81% of health outcomes. Clinical care accounted for 3%.",
+      label: "share of health outcomes: socioeconomic factors and behaviours vs clinical care",
+      note: "From one nation-wide study the review cites: socioeconomic factors and health behaviours contributed 81% to health outcomes, and clinical care 3%.",
     },
     question:
-      "Why is the brain so sensitive to the social environment, and what would it take to measure social connection at the scale and frequency clinical care actually needs?",
+      "Why does the social environment matter so much to neurological health, and how can clinicians measure it and act on it?",
     method:
-      "A review across three layers: the neurobiology and psychology of social connection, the assessment methods available including new wearable sensors, and the design of network interventions.",
+      "A review in three parts: the biology and psychology of social networks, assessment methods including new social sensors, and the design of network interventions and social therapeutics.",
     finding:
-      "Social networks are the one social determinant of health a clinician can actually reach. But surveys are burdensome, episodic and blind to anyone who cannot answer them — which points to passive sensing.",
+      "Social networks are among the most proximate social determinants of health that clinicians can actually reach. Self-report has clear limits in the clinic, so the review turns to passive observation methods such as the Electronically Activated Recorder and newer wearable sensors.",
     caveat:
-      "A review synthesises; it does not test. The sensing methods it surveys were, at the time of writing, largely unvalidated in patients.",
+      "It is a review, so it reports no new data of its own.",
     stats: [
-      { value: "+32%", label: "stroke risk with poor social relationships", note: "The same body of evidence puts the increased risk of developing dementia at 50%." },
-      { value: "3", label: "layers of definition", note: "Social networks are the people. Social interactions are the synchronous exchanges. Social connection covers the structural, functional and qualitative sides of both." },
-      { value: "6", label: "authors, four disciplines", note: "Neurology, health policy, electrical engineering, computer science and psychology. This is the SocialBit team forming." },
+      { value: "45%", label: "of hospitalised stroke patients can't complete questionnaires", note: "Because of cognitive or language deficits, according to the authors' own work. This is the review's reason for turning to passive sensing." },
+      { value: "+32%", label: "stroke risk with poor social relationships", note: "The review also cites a 50% increased risk of developing dementia." },
+      { value: "3 of 6", label: "authors later on the SocialBit papers", note: "Shrikanth Narayanan (electrical and computer engineering), Min Shin (computer science) and Matthias Mehl (psychology)." },
     ],
     procedure: [
-      { label: "Biology", detail: "Reviews how the social environment shapes brain development and how isolation raises stress response and allostatic load." },
-      { label: "Psychology", detail: "Sets out the social baseline — the idea that wellbeing is calibrated to expected social contact." },
-      { label: "Assessment", detail: "Compares survey instruments against emerging mobile and acoustic sensing, including the electronically activated recorder tradition Mehl built." },
-      { label: "Intervention", detail: "Lays out how network interventions could be designed, and why prior social support trials mostly failed." },
+      { label: "Biology", detail: "Reviews how the social environment shapes brain development and the brain's specialised social systems." },
+      { label: "Psychology", detail: "Argues that well-being rests on a social baseline, and reviews evidence linking social connection to well-being and physical health." },
+      { label: "Assessment", detail: "Covers survey instruments and newer sensing tools usable in patients with varying deficits, including the Electronically Activated Recorder." },
+      { label: "Intervention", detail: "Discusses the design of network interventions and social therapeutics." },
     ],
     limitations: [
-      "Narrative rather than systematic, so selection of evidence is a judgement call.",
-      "The sensing approaches reviewed had not been validated in patients with neurological deficits.",
-      "It argues that networks are modifiable without yet having a positive trial to point to.",
+      "The review doesn't include a limitations section of its own. As a review, it reports no new data.",
     ],
     soWhat:
-      "This is the hinge of the collection. Everything before it measures networks by asking. Everything after it measures them by listening.",
+      "It is where the collection turns toward sensing. The survey-based studies before it rely on self-report; the SocialBit papers after it measure interaction from audio.",
     figures: [],
     connections: [
-      { to: "theory-2016", kind: "builds-on", why: "Revisits and updates the agenda set out six years earlier." },
-      { to: "protocol-2023", kind: "motivates", why: "The sensing case made here becomes a funded validation study." },
-      { to: "trial-2025", kind: "motivates", why: "Its intervention design section is what TEAMS-BP goes on to test." },
+      { to: "protocol-2023", kind: "cited-by", why: "The SocialBit protocol cites this review." },
+      { to: "validation-2026", kind: "shared-authors", why: "Narayanan, Shin and Mehl, three of this review's authors, are also authors of the SocialBit validation." },
+      { to: "trial-2025", kind: "shared-authors", why: "Niteesh Choudhry is an author here and the trial's senior author." },
     ],
     readNext: [
-      { to: "protocol-2023", why: "The sensor stops being a proposal and becomes a study design." },
-      { to: "trial-2025", why: "Or follow the intervention thread instead, into a randomised trial." },
+      { to: "protocol-2023", why: "The sensing idea becomes a study design." },
+      { to: "trial-2025", why: "Or follow the intervention side into a randomised trial." },
     ],
-    tags: ["review", "social sensing", "neurobiology", "team"],
+    tags: ["review", "social sensing", "neurobiology", "EAR"],
   },
 
   {
@@ -456,48 +466,48 @@ export const PAPERS: Paper[] = [
     doi: "10.1136/bmjopen-2023-076297",
     url: "https://doi.org/10.1136/bmjopen-2023-076297",
     license: "cc-by-nc",
+    pages: 9,
     minutes: 3,
     glance:
-      "The plan, published before the answer was known. A watch listens, human coders watch a video livestream, and the two are compared minute by minute.",
+      "The study plan, published before the results. Patients wear a smartwatch running SocialBit, human observers tally their interactions over a video livestream, and the two records are compared.",
     headline: {
-      value: "8 days",
-      label: "of continuous observation per patient",
-      note: "Across hospitalisation and rehabilitation, with a target of 200 patients at Brigham and Women's and Spaulding.",
+      value: "Up to 8 days",
+      label: "of observation per patient",
+      note: "During hospitalisation and rehabilitation, with a target of 200 patients at Brigham and Women's Hospital and Spaulding Rehabilitation Hospital.",
     },
     question:
-      "Can a smartwatch detect social interaction accurately in stroke survivors whose speech, cognition and movement are impaired — the people every survey-based study has had to exclude?",
+      "Can a smartwatch detect social interaction accurately in stroke survivors with varying speech, cognitive and physical deficits?",
     method:
-      "A prospective observational validation study. Patients wear a SocialBit-equipped smartwatch during normal hospital days while human observers tally their interactions over a video livestream. The human tally is the ground truth.",
+      "A prospective observational validation study. Patients wear a SocialBit-equipped smartwatch during ordinary hospital days while human observers tally their interactions over a video livestream. The human tally is the ground truth.",
     finding:
-      "Pre-registered, so there is no finding yet. What matters is the design commitment: ground truth is minute-level human observation, not patient recall.",
+      "A protocol has no results. Its key design choice is the ground truth: human observers watching a livestream, not patient recall.",
     caveat:
-      "The authors flag it themselves. A hospital is not a home, and refusing to store raw audio makes the machine learning harder, not easier.",
+      "The authors note two limits: a hospital is not a home, and not recording raw audio makes the machine learning harder.",
     stats: [
       { value: "200", label: "patients targeted", note: "Recruited at Brigham and Women's Hospital and Spaulding Rehabilitation Hospital in Boston." },
-      { value: "0", label: "seconds of raw audio stored", note: "Only derived acoustic features are kept, which is what makes continuous recording in a hospital room defensible." },
-      { value: "1", label: "person has to wear a device", note: "Earlier interaction sensors needed every party in the conversation to be instrumented. This one does not." },
+      { value: "0", label: "seconds of raw audio stored", note: "The app stores audio features, never the raw audio." },
+      { value: "1", label: "person wears a device", note: "Only the patient wears the watch, not their conversation partners." },
     ],
     procedure: [
-      { label: "Recruit", detail: "Consecutive inpatients with acute ischaemic stroke, including those with aphasia and cognitive impairment." },
-      { label: "Wear", detail: "A commercial smartwatch runs SocialBit through the patient's ordinary day, up to 8 days across acute and rehabilitation settings." },
-      { label: "Observe", detail: "Human coders score each minute as interaction or not, watching a video livestream of the room." },
-      { label: "Compare", detail: "Algorithm output is scored against the human tally, and interaction time is related to stroke characteristics and outcomes." },
+      { label: "Recruit", detail: "Inpatients with stroke, including those with speech, cognitive and physical deficits." },
+      { label: "Wear", detail: "A commercial smartwatch runs SocialBit through the patient's ordinary day, for up to 8 days across hospital and rehabilitation." },
+      { label: "Observe", detail: "Human observers tally the patient's interactions by watching a video livestream of the room." },
+      { label: "Compare", detail: "SocialBit's output is scored against the human tally, and interaction time is related to stroke characteristics and outcomes." },
     ],
     limitations: [
-      "Conducted in hospital, so accuracy in a home or community setting stays unknown.",
-      "Privacy protection removes raw audio, which deprives the model of the richest possible input.",
-      "Ground-truth coding by video livestream is expensive, which caps how much data can exist.",
+      "The study runs in hospital; the authors suggest future validation in a more natural home setting.",
+      "To protect privacy the algorithm doesn't record raw audio, which the authors note makes the machine learning harder.",
     ],
     soWhat:
-      "Publishing the protocol first is what makes the 2026 numbers credible. The bar was set before anyone knew whether the algorithm could clear it.",
+      "Because the design was published first, the 2026 results can be read against a plan that was already public.",
     figures: [],
     connections: [
-      { to: "recovery-2019", kind: "answers", why: "Directly targets the aphasia exclusion that limited the recovery study." },
-      { to: "gaps-2022", kind: "builds-on", why: "Turns the review's case for social sensing into a registered study." },
-      { to: "validation-2026", kind: "tests", why: "This is the plan; the 2026 paper is the result." },
+      { to: "gaps-2022", kind: "cites", why: "Cites the 2022 review; three of the review's authors are also authors here." },
+      { to: "recovery-2019", kind: "gap-named", why: "Designed for stroke survivors with speech and cognitive deficits, the group the 2019 recovery study had to exclude." },
+      { to: "validation-2026", kind: "results-of", why: "The 2026 paper reports this study, citing this protocol for its full design." },
     ],
     readNext: [
-      { to: "validation-2026", why: "Read the answer to the question this protocol asks." },
+      { to: "validation-2026", why: "The results of the study this protocol describes." },
     ],
     tags: ["protocol", "ground truth", "privacy", "aphasia"],
   },
@@ -507,7 +517,7 @@ export const PAPERS: Paper[] = [
     step: 7,
     year: 2025,
     kind: "Trial",
-    role: "Tries to intervene",
+    role: "Tests an intervention",
     title:
       "Social network intervention to improve blood pressure control after stroke: The TEAMS-BP randomized clinical trial",
     authors:
@@ -517,50 +527,51 @@ export const PAPERS: Paper[] = [
     doi: "10.1016/j.socscimed.2025.118231",
     url: "https://doi.org/10.1016/j.socscimed.2025.118231",
     license: "closed",
+    pages: 8,
     minutes: 5,
     glance:
-      "The trial missed its primary endpoint. But split the patients by constraint and the effect flips sign — tight networks gained 12 mmHg, open networks lost 16.",
+      "No significant difference in blood pressure overall. In the pre-specified subgroups, network counselling went with 12.4 mmHg lower pressure in close-knit networks and 16.1 mmHg higher in open ones.",
     headline: {
       value: "−12.4 vs +16.1",
-      label: "mmHg change, high vs low constraint",
-      note: "The same intervention lowered blood pressure in patients with closed networks and raised it in patients with open ones. p = 0.03.",
+      label: "mmHg, high vs low constraint",
+      note: "Network counselling compared with individual counselling, by constraint above or below the median. p = 0.03.",
     },
     question:
-      "Networks predict outcomes. Can changing them change a hard clinical number — systolic blood pressure after stroke?",
+      "Can a network intervention lower systolic blood pressure after stroke, compared with individual counselling?",
     method:
-      "A randomised controlled trial. 45 stroke survivors recruited over two years, 24 assigned to network counselling that brought their contacts into the sessions, 21 to individual counselling. Three months of follow-up. Registered as NCT05258890.",
+      "A randomised controlled trial. Over two years, 45 stroke survivors were recruited: 24 to network counselling, which involved their network members, and 21 to individual counselling, for three months. Registered as NCT05258890.",
     finding:
-      "No significant difference overall: −5.2 mmHg, 95% CI −14.8 to 4.5, p = 0.29. The pre-specified subgroup told a different story, and constraint was the variable that split it.",
+      "No significant difference overall: −5.2 mmHg, 95% CI −14.8 to 4.5, p = 0.29. In pre-specified subgroups, the intervention's effect differed by constraint.",
     caveat:
-      "The dropout is severe enough to shape the conclusion. Two thirds of the intervention arm withdrew or were lost, and engagement among those who stayed varied widely.",
+      "The authors call the findings preliminary because of dropout in both arms and uneven engagement of network members. 16 of 24 in the intervention arm withdrew or were lost to follow-up.",
     stats: [
-      { value: "−5.2 mmHg", label: "primary outcome, adjusted", note: "95% CI −14.8 to 4.5, p = 0.29. Numerically lower in the intervention arm, but not significant." },
-      { value: "16 of 24", label: "intervention patients lost", note: "In the control arm, 10 of 21 withdrew or were lost to follow-up. The trial ran for two years to recruit 45 people." },
-      { value: "24%", label: "attended network sessions alone", note: "58% brought one other person; 18% brought three or more. A network intervention that no network attends is individual counselling." },
+      { value: "−5.2 mmHg", label: "primary outcome, adjusted", note: "95% CI −14.8 to 4.5, p = 0.29. Lower in the intervention arm, but not significant." },
+      { value: "16 of 24", label: "intervention patients lost", note: "In the control arm, 10 of 21 withdrew or were lost to follow-up." },
+      { value: "24%", label: "attended network sessions alone", note: "Of those who attended, 58% joined with one other person and 18% with three or more." },
     ],
     procedure: [
       { label: "Randomise", detail: "Stroke survivors assigned to network counselling or individual counselling for three months." },
-      { label: "Activate", detail: "The network arm invited the patient's own contacts into sessions built around teamwork on blood pressure control." },
-      { label: "Measure", detail: "Absolute systolic blood pressure difference over three months, as the primary outcome." },
-      { label: "Split", detail: "Pre-specified subgroups by constraint, network size, age, sex, baseline blood pressure and the share of contacts with hypertension." },
+      { label: "Involve", detail: "The network arm brought the patient's own network members into the counselling." },
+      { label: "Measure", detail: "The primary outcome was the absolute difference in systolic blood pressure over three months." },
+      { label: "Split", detail: "Pre-specified subgroups by age, sex and baseline blood pressure, with further subgroups by constraint, network size and the share of contacts with high blood pressure." },
     ],
     limitations: [
-      "High dropout in both arms, worse in the intervention arm, which the authors put first among the limitations.",
-      "Engagement varied so much that the intervention was not consistently delivered.",
-      "45 participants is small for a subgroup analysis, so the constraint finding is a hypothesis, not a result.",
-      "Patients described real barriers: discomfort asking family for help, contacts who could not find time, and withdrawal from embarrassment about new disability.",
+      "High dropout in both arms, which the authors call the main limitation.",
+      "Engagement in the network arm varied widely.",
+      "The authors describe barriers: discomfort involving family or friends, network members without time for meetings, and withdrawal after new disability.",
     ],
     soWhat:
-      "A null trial that earns its keep. It says network interventions are not for everyone — they are for people whose networks are already closed, which is exactly the group the 2019 arrival study flagged.",
+      "The subgroup result suggests network interventions may help most where networks are close-knit. The authors frame this as a direction for further research.",
     figures: [],
     connections: [
-      { to: "arrival-2019", kind: "builds-on", why: "Constraint, the variable that predicted delayed arrival, is what predicts who responds here." },
-      { to: "gaps-2022", kind: "tests", why: "Puts the review's intervention design into a randomised trial." },
-      { to: "validation-2026", kind: "motivates", why: "Poor engagement and coarse outcomes are the case for a passive, continuous measure." },
+      { to: "theory-2016", kind: "cites", why: "Cites the 2016 social network theory of patients as the basis for its intervention." },
+      { to: "instrument-2018", kind: "cites", why: "Cites the 2018 tool and reports the same network measures." },
+      { to: "arrival-2019", kind: "same-measure", why: "Constraint split this trial's results, as it separated slow from fast arrivers in the 2019 study." },
+      { to: "gaps-2022", kind: "shared-authors", why: "Niteesh Choudhry, this trial's senior author, is an author of the 2022 review." },
     ],
     readNext: [
-      { to: "arrival-2019", why: "Go back for what constraint means, and why closed networks behave differently." },
-      { to: "validation-2026", why: "The measurement problem this trial ran into, solved." },
+      { to: "arrival-2019", why: "Where constraint first separated patients in this collection." },
+      { to: "validation-2026", why: "The other recent paper: measuring social interaction itself rather than changing networks." },
     ],
     tags: ["randomised trial", "blood pressure", "constraint", "null result"],
   },
@@ -570,7 +581,7 @@ export const PAPERS: Paper[] = [
     step: 8,
     year: 2026,
     kind: "Validation",
-    role: "Delivers the sensor",
+    role: "Validates the sensor",
     title:
       "Validation of SocialBit as a smartwatch algorithm for social interaction detection in a clinical population",
     authors:
@@ -580,77 +591,77 @@ export const PAPERS: Paper[] = [
     doi: "10.1038/s41598-026-37746-x",
     url: "https://doi.org/10.1038/s41598-026-37746-x",
     license: "cc-by",
+    pages: 12,
     minutes: 7,
     glance:
-      "88,918 minutes of hospital life, coded by hand, against a watch that never stores a word. The watch agrees with the humans 87% of the time — including in patients who cannot speak.",
+      "88,918 minutes of hospital life coded by humans, compared with a watch that never stores raw audio. SocialBit reached 0.87 sensitivity and 0.88 specificity, and held up in patients with aphasia.",
     headline: {
       value: "0.94",
       label: "area under the curve",
-      note: "Sensitivity 0.87, specificity 0.88, balanced accuracy 0.87. Benchmarked against minute-by-minute human coding of a video livestream.",
+      note: "Sensitivity 0.87, specificity 0.88, balanced accuracy 0.87, compared against minute-by-minute human coding of a video livestream.",
     },
     question:
-      "Does the sensor work — in real hospital rooms, with televisions on and side conversations running, in patients with aphasia, on more than one brand of watch?",
+      "How accurately does SocialBit detect social interaction in hospitalised stroke patients with a wide range of stroke severity, cognition and language ability?",
     method:
-      "153 hospitalised stroke patients wore a smartwatch from 9am to 5pm for up to 8 days between June 2021 and March 2025. YAMNet extracts 1,024-dimensional audio embeddings on the watch; a fine-tuned Transformer classifies each minute. Human coders scored 88,918 minutes as ground truth.",
+      "153 hospitalised stroke patients wore a smartwatch from 9am to 5pm for up to 8 days between June 2021 and March 2025. YAMNet turned audio into 1,024-dimensional features on the watch, and a fine-tuned Transformer, run off the watch, labelled each minute. Human coders scored 88,918 minutes as ground truth.",
     finding:
-      "0.87 sensitivity and 0.88 specificity overall, holding at 0.93 AUC in patients with aphasia. Patients with more severe strokes interacted less, and the watch detected that relationship at nearly the same strength the human coders did.",
+      "Sensitivity 0.87 and specificity 0.88 overall, with an AUC of 0.93 in patients with aphasia. Patients with more severe strokes interacted less, a relationship SocialBit detected at close to the strength human coders did.",
     caveat:
-      "It detects that an interaction happened, not what kind. Depth, tone and quality — the things that make an interaction matter — are still invisible to it.",
+      "It detects whether an interaction happened, not its depth, tone or quality — features the authors say matter for functional outcomes.",
     stats: [
-      { value: "88,918", label: "minutes coded by humans", note: "About 1,482 hours across 325 hospital days. SocialBit itself contributed 14,045 minutes, sampling one minute in every five to protect battery." },
-      { value: "0.87 / 0.88", label: "sensitivity / specificity", note: "The Transformer version. It beat the AudioSet Speech benchmark by 6.1% in balanced accuracy and AudioSet Conversation by 20%." },
-      { value: "0.93", label: "AUC in patients with aphasia", note: "24 patients, including 7 with global aphasia. Only 1.1% below patients without aphasia." },
-      { value: "−0.9%", label: "interaction time per NIHSS point", note: "Each 1-point rise in stroke severity cut SocialBit-measured interaction time by 0.9%. Human coders measured 1.1%. r = −0.19, p = 0.029." },
-      { value: "0.51 vs 0.50", label: "share of time interacting, humans vs watch", note: "Mean proportions almost identical, both with SD 0.20, despite the watch sampling a fifth as often." },
-      { value: "3.7M", label: "parameters in the on-watch model", note: "YAMNet is built on MobileNet v1 and processes 0.96-second windows in real time without flattening the battery." },
+      { value: "88,918", label: "minutes coded by humans", note: "About 1,482 hours over 325 hospital days. SocialBit produced 14,045 minutes, because it recorded audio features for one minute in every five to save battery." },
+      { value: "0.87 / 0.88", label: "sensitivity / specificity", note: "The Transformer version. Its balanced accuracy of 0.87 compares with 0.82 for the AudioSet Speech benchmark and 0.67 for AudioSet Conversation." },
+      { value: "0.93", label: "AUC in patients with aphasia", note: "24 patients, 7 of them with global aphasia. Only 1.1% below patients without aphasia." },
+      { value: "−0.9%", label: "interaction time per NIHSS point", note: "Each 1-point rise in stroke severity went with 0.9% less interaction time by SocialBit and 1.1% less by human coders. r = −0.19, p = 0.029 for SocialBit." },
+      { value: "0.51 vs 0.50", label: "share of time interacting, humans vs SocialBit", note: "Nearly identical means, both with SD 0.20, despite SocialBit sampling one minute in five." },
+      { value: "3.7M", label: "parameters in YAMNet, the model on the watch", note: "Built on MobileNet v1, it processes 0.96-second audio windows in real time while preserving battery life. In this study the interaction classifier ran off the watch." },
     ],
     procedure: [
       { label: "Listen", detail: "The watch captures ambient audio for one minute in every five, from 9am to 5pm." },
-      { label: "Abstract", detail: "YAMNet converts each 0.96-second window into a 1,024-dimensional embedding on the device. Raw audio is never stored, and no language processing runs, so words and speaker identity are gone before anything leaves the watch." },
-      { label: "Classify", detail: "A fine-tuned Transformer — two units, six-head attention, 768 dimensions — labels each one-minute segment as interaction or not. An LSTM version was trained alongside it and scored slightly lower." },
-      { label: "Check", detail: "Five-fold cross-validation against the human coding, then broken out by aphasia subtype, conversational depth, tone, speakers, partner, language, modality, television noise, side conversations, care setting and watch model." },
+      { label: "Abstract", detail: "YAMNet turns each 0.96-second window into a 1,024-dimensional feature vector on the watch. Raw audio isn't stored and no language processing runs; the features leave out specific words and speaker identity." },
+      { label: "Classify", detail: "A fine-tuned Transformer — two units, six-head attention, 768 dimensions — labels each one-minute segment as interaction or not. An LSTM version was also trained and scored slightly lower." },
+      { label: "Check", detail: "Five-fold cross-validation against the human coding, broken down by aphasia, conversation depth, tone, number of speakers, partner, language, modality, television, side conversations, care setting and watch model." },
     ],
     limitations: [
-      "All data came from hospital and rehabilitation settings; home and community use will need retuning.",
-      "Most interactions were in English, with only 210 non-English samples.",
-      "Severe stroke and aphasia were represented but thinly — 24 patients with aphasia, 7 of them global.",
-      "The model classifies whether an interaction happened, not its depth, tone or quality.",
-      "Feature extraction ran on the watch but training and inference ran off-device; fully on-watch inference is still future work.",
-      "Making this routine would need changes in clinical culture, reimbursement and regulation, not just accuracy.",
+      "Data came from hospital settings; the algorithm may need further tuning for home or community use.",
+      "Most interactions were in English.",
+      "Patients with severe stroke and aphasia were limited in number.",
+      "The model detects whether an interaction happened, not its depth, tone or quality.",
+      "Using social sensing in clinical care would need changes in culture, reimbursement and regulation.",
     ],
     soWhat:
-      "Ten years after the framework paper asked for a way to measure the social world of a patient, there is one — and it works on the patients who could never fill in the survey.",
+      "It gives a validated way to measure social interaction without self-report, including in patients with aphasia whom earlier survey studies had to exclude.",
     figures: [
       {
         src: "figures/roc-socialbit.png",
         alt: "Receiver operating characteristic curves for four models. The SocialBit Transformer curve rises most steeply, reaching an area under the curve of 0.94.",
         reading:
-          "Four models, one chart. The higher and further left a curve bends, the better. SocialBit's Transformer (dark red, AUC 0.94) clears both off-the-shelf AudioSet classifiers, and the gap over AudioSet Conversation (green, 0.73) is the whole reason a custom model was needed.",
+          "Four models on one chart; the closer a curve bends to the top left, the better. SocialBit's Transformer (dark red, AUC 0.94) is above both off-the-shelf AudioSet classifiers, most clearly AudioSet Conversation (green, 0.73).",
         credit: "Dhand et al., Scientific Reports 2026, Fig. 3. CC BY 4.0.",
       },
       {
         src: "figures/severity-effect.png",
-        alt: "Scatter plot of proportion of time spent interacting against NIH Stroke Scale score, with near-identical downward regression lines for SocialBit and human coders.",
+        alt: "Scatter plot of proportion of time spent interacting against NIH Stroke Scale score, with similar downward regression lines for SocialBit and human coders.",
         reading:
-          "The clinical proof. Sicker patients interact less — and the watch's line (red) sits almost on top of the human coders' line (blue). The watch is not just accurate against humans, it recovers the same clinical relationship they do.",
+          "Patients with more severe strokes interacted less. SocialBit's line (red) and the human coders' line (blue) slope down together.",
         credit: "Dhand et al., Scientific Reports 2026, Fig. 5. CC BY 4.0.",
       },
       {
         src: "figures/aphasia-sensitivity.png",
         alt: "Bar chart of SocialBit sensitivity across aphasia subtypes: global 0.73, Wernicke's 0.93, Broca's 0.82, mixed 0.90, unknown 0.86.",
         reading:
-          "Where it strains. Global aphasia — the patients who speak least — is the one bar that drops, to 0.73 from 7 patients. Detection depends on someone producing speech, so the least verbal patients are the hardest to see.",
+          "Sensitivity by aphasia subtype. Global aphasia is lowest, at 0.73 from 7 patients. The authors suggest sensitivity drops in aphasia because these patients contribute less speech and their interactions are briefer.",
         credit: "Dhand et al., Scientific Reports 2026, Fig. 4. CC BY 4.0.",
       },
     ],
     connections: [
-      { to: "protocol-2023", kind: "tests", why: "Reports the study the protocol registered, at 153 patients against a 200 target." },
-      { to: "recovery-2019", kind: "answers", why: "Measures the aphasia patients the recovery study had to exclude." },
-      { to: "theory-2016", kind: "answers", why: "Delivers the measurement the original framework called for, without asking the patient anything." },
+      { to: "protocol-2023", kind: "protocol-for", why: "Cites the 2023 protocol for its full design, and reports 153 patients against the protocol's target of 200." },
+      { to: "recovery-2019", kind: "gap-named", why: "Includes 24 patients with aphasia, a group the 2019 recovery study had to exclude." },
+      { to: "gaps-2022", kind: "shared-authors", why: "Narayanan, Shin and Mehl are authors of both." },
     ],
     readNext: [
-      { to: "theory-2016", why: "Close the loop. Read the 2016 agenda again knowing what it turned into." },
-      { to: "trial-2025", why: "The obvious next question: could this measure have rescued the trial's endpoint?" },
+      { to: "theory-2016", why: "Go back to where the collection starts, the 2016 framework." },
+      { to: "trial-2025", why: "The other recent paper: changing networks rather than measuring interaction." },
     ],
     tags: ["smartwatch", "YAMNet", "transformer", "aphasia", "digital biomarker"],
   },
@@ -659,60 +670,60 @@ export const PAPERS: Paper[] = [
 export const byId = (id: string) => PAPERS.find((p) => p.id === id)!;
 
 /**
- * What each paper is actually built on, side by side.
- *
- * Kept apart from the exhibits because it only exists to be compared — reading
- * down these columns is the fastest way to see that the collection rests on
- * four cohorts, one of which never reached its recruitment target.
+ * What each paper brings of its own. Five report their own participants; the
+ * framework, the review and the protocol don't.
  */
 export const COHORTS: Record<
   string,
   { n: string; design: string; setting: string }
 > = {
-  "theory-2016": { n: "—", design: "Framework", setting: "No cohort" },
-  "instrument-2018": { n: "1,493", design: "Cross-sectional survey", setting: "GEMS cohort, nationwide, USA" },
-  "arrival-2019": { n: "175", design: "Observational, two groups", setting: "Stroke admissions" },
-  "recovery-2019": { n: "172", design: "Prospective, 6 months", setting: "Mild ischaemic stroke" },
-  "gaps-2022": { n: "—", design: "Narrative review", setting: "No cohort" },
-  "protocol-2023": { n: "200 target", design: "Observational validation", setting: "Two Boston hospitals" },
+  "theory-2016": { n: "—", design: "Framework", setting: "No participants" },
+  "instrument-2018": { n: "1,493", design: "Cross-sectional survey", setting: "GEMS cohort, United States" },
+  "arrival-2019": { n: "175", design: "Observational, two groups", setting: "Acute ischaemic stroke" },
+  "recovery-2019": { n: "172", design: "Prospective, 6 months", setting: "Mostly mild ischaemic stroke" },
+  "gaps-2022": { n: "—", design: "Review", setting: "No participants" },
+  "protocol-2023": { n: "200 planned", design: "Observational validation", setting: "Two Boston hospitals" },
   "trial-2025": { n: "45", design: "Randomised controlled trial", setting: "Stroke survivors, 3 months" },
-  "validation-2026": { n: "153", design: "Prospective validation", setting: "Inpatient and rehabilitation" },
+  "validation-2026": { n: "153", design: "Prospective validation", setting: "Hospital and rehabilitation" },
 };
 
-/** Relationship labels, written to read naturally on an edge in the map. */
+/** How each link kind reads beside the paper it points to. */
 export const LINK_LABEL: Record<LinkKind, string> = {
-  "builds-on": "builds on",
-  "same-instrument": "same instrument",
-  "same-cohort": "same cohort",
-  answers: "answers",
-  motivates: "motivates",
-  tests: "tests",
+  cites: "cites",
+  "cited-by": "cited by",
+  "same-tool": "same survey tool",
+  "same-measure": "same measure",
+  "shared-authors": "shared authors",
+  "protocol-for": "protocol",
+  "results-of": "results",
+  "gap-named": "gap it addresses",
+  "gap-addressed": "gap addressed by",
 };
 
-/** Curated routes through the collection, for readers with different budgets. */
+/** Routes through the collection, for readers with different amounts of time. */
 export const ROUTES = [
   {
-    id: "ten",
-    label: "10 minutes",
-    blurb: "The shortest path from the idea to the working sensor.",
+    id: "short",
+    label: "Shortest route",
+    blurb: "The 2016 framework and the 2026 sensor validation.",
     steps: ["theory-2016", "validation-2026"],
   },
   {
     id: "method",
     label: "How it was measured",
-    blurb: "Follow the instrument: survey, then sensor.",
+    blurb: "The survey tool, then the sensor study's protocol and results.",
     steps: ["instrument-2018", "protocol-2023", "validation-2026"],
   },
   {
     id: "clinical",
-    label: "What it means for patients",
-    blurb: "The findings with a bedside consequence.",
+    label: "Patient outcomes",
+    blurb: "Arrival time, physical function and blood pressure.",
     steps: ["arrival-2019", "recovery-2019", "trial-2025"],
   },
   {
     id: "full",
-    label: "The whole arc",
-    blurb: "All eight, in the order they were written.",
+    label: "All eight",
+    blurb: "In publication order.",
     steps: PAPERS.map((p) => p.id),
   },
 ];

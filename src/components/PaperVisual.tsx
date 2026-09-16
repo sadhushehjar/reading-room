@@ -100,7 +100,8 @@ function TwoNetworks() {
   ];
   const p2Ties: Tie[] = [
     [0, 1, "strong"], [0, 2, "weak"], [0, 3, "weak"], [0, 4, "strong"], [0, 5, "strong"],
-    [1, 5, "strong"], [2, 3, "weak"], [3, 4, "weak"], [4, 5, "strong"], [1, 2, "weak"],
+    // six ties among five contacts: density 0.6
+    [1, 5, "strong"], [2, 3, "weak"], [3, 4, "weak"], [4, 5, "strong"], [1, 2, "weak"], [2, 4, "weak"],
   ];
 
   return (
@@ -176,6 +177,11 @@ function Contraction() {
         strokeWidth={1.2}
         markerEnd="url(#arrow)"
       />
+      {/* the reported change, set between the two rings where nothing else sits */}
+      <g fontSize="8" fontFamily="var(--font-mono)" fill={BRASS} textAnchor="middle">
+        <text x="149" y="80">−1.25 people</text>
+        <text x="149" y="91">on average</text>
+      </g>
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
           <path d="M0 0 L10 5 L0 10 z" fill={INK3} />
@@ -195,7 +201,7 @@ function Contraction() {
         <text x="16" y="150">AT STROKE</text>
         <text x="16" y="161" fill={INK}>larger, looser</text>
         <text x="176" y="150">SIX MONTHS ON</text>
-        <text x="176" y="161" fill={INK}>−1.25 people, denser, kin</text>
+        <text x="176" y="161" fill={INK}>denser, more family</text>
       </g>
     </svg>
   );
@@ -209,15 +215,13 @@ function Contraction() {
 function Determinants() {
   const rows = [
     { label: "Socioeconomic factors and health behaviours", pct: 81 },
-    { label: "Everything else measured", pct: 16 },
     { label: "Clinical care", pct: 3 },
   ];
   return (
     <svg viewBox="0 0 300 168" className="w-full">
       {rows.map((r, i) => {
-        const y = 26 + i * 46;
+        const y = 40 + i * 64;
         const w = (r.pct / 100) * 284;
-        const lit = r.pct === 81 || r.pct === 3;
         return (
           <g key={r.label}>
             <rect
@@ -225,14 +229,14 @@ function Determinants() {
               y={y}
               width={Math.max(w, 2)}
               height={17}
-              fill={r.pct === 81 ? BRASS : r.pct === 3 ? STRONG : "var(--color-paper-2)"}
+              fill={r.pct === 81 ? BRASS : STRONG}
             />
             <text
               x={8}
               y={y - 6}
               fontSize="9"
               fontFamily="var(--font-mono)"
-              fill={lit ? INK : INK3}
+              fill={INK}
             >
               {r.pct}%
             </text>
@@ -384,17 +388,17 @@ const DRAWN: Record<string, { node: React.ReactNode; caption: string }> = {
   "theory-2016": {
     node: <TwoNetworks />,
     caption:
-      "Two stroke patients with the same diagnosis and opposite social structure. Drawn from the metrics reported in Fig. 4.",
+      "Two stroke patients with very different networks. Redrawn to match the size and density reported in Fig. 4; where the ties sit is illustrative.",
   },
   "recovery-2019": {
     node: <Contraction />,
     caption:
-      "What six months after a stroke does to a network. Drawn from the reported change of −1.25 people, rising density and pruned unhealthy ties.",
+      "An illustration, not to scale, of the reported change: 1.25 fewer people on average, denser and more family-oriented, with contacts who smoked or did not exercise pruned (circled).",
   },
   "gaps-2022": {
     node: <Determinants />,
     caption:
-      "The share of health outcomes attributable to each source, from the nation-wide study the review cites.",
+      "The two shares the review quotes from a nation-wide study: 81% for socioeconomic factors and health behaviours, 3% for clinical care.",
   },
   "protocol-2023": {
     node: <Pipeline />,
@@ -404,7 +408,7 @@ const DRAWN: Record<string, { node: React.ReactNode; caption: string }> = {
   "trial-2025": {
     node: <SubgroupFlip />,
     caption:
-      "Systolic blood pressure change by network type, from the subgroup analysis in Table 4. p = 0.03.",
+      "Network counselling compared with individual counselling, by constraint subgroup, from Table 4. p = 0.03.",
   },
 };
 
