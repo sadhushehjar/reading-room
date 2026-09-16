@@ -48,6 +48,14 @@ function Card({
               {paper.title}
             </h3>
 
+            {/* every author, in full: the people reading this are on these lists */}
+            <p className="mt-3 max-w-[60ch] font-read text-[0.95rem] leading-[1.5] text-ink-2">
+              {paper.authors}
+            </p>
+            <p className="mt-1 font-read text-[0.95rem] italic leading-[1.5] text-ink-3">
+              {paper.venue}
+            </p>
+
             <p className="mt-4 max-w-[48ch] font-read text-[1.04rem] leading-[1.55] text-ink-2">
               {paper.glance}
             </p>
