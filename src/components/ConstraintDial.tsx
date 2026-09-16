@@ -12,8 +12,9 @@ import { useMemo, useState } from "react";
  *
  * The anchor values are real. Slow arrivers in the 2019 stroke cohort averaged
  * a network of 5 at constraint 61; fast arrivers averaged 8 at constraint 40.
- * The blood-pressure numbers are the 2025 trial's subgroup analysis. Everything
- * between the anchors is interpolated, and the exhibit says so.
+ * Everything between the anchors is interpolated, and the exhibit says so.
+ * No trial result is shown here: the drawing is not a patient, so no
+ * outcome can be attached to it.
  */
 
 const MIN = 25;
@@ -61,8 +62,6 @@ export default function ConstraintDial() {
   const net = useNetwork(c);
 
   const closed = c >= 61;
-  // 2025 trial subgroup: −12.4 mmHg above the median constraint, +16.1 below
-  const bp = closed ? -12.4 : 16.1;
 
   // ego ties are drawn first and take the strong ties first, which is how these
   // networks actually read: you are close to your own contacts before they are
@@ -78,8 +77,9 @@ export default function ConstraintDial() {
       </h3>
       <p className="mt-4 max-w-[58ch] text-[1.02rem] leading-[1.6] text-chalk-2">
         Constraint measures how far the people around you already know each
-        other. Drag it up and the network closes in. Two studies in this
-        collection report what constraint was linked to.
+        other. Drag it up and the network closes in. The 2019 arrival study
+        compared constraint between patients who reached hospital early and
+        late.
       </p>
 
       <div className="mt-9 grid gap-9 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-center">
@@ -199,35 +199,11 @@ export default function ConstraintDial() {
             </p>
           </div>
 
-          <div className="border-t border-line-wall pt-5">
-            <div className="u-label mb-2">
-              Network counselling · 2025 trial subgroup
-            </div>
-            <div className="flex items-baseline gap-3">
-              <span
-                className={`u-num text-[2rem] font-600 ${
-                  bp < 0 ? "text-brass" : "text-tie-strong"
-                }`}
-              >
-                {bp > 0 ? `+${bp}` : bp}
-              </span>
-              <span className="text-[0.98rem] leading-snug text-chalk-2">
-                mmHg systolic vs individual counselling
-              </span>
-            </div>
-            <p className="mt-2 text-[0.98rem] leading-[1.5] text-chalk-3">
-              {closed
-                ? "In the trial's high-constraint subgroup, network counselling went with lower blood pressure than individual counselling."
-                : "In the low-constraint subgroup it went with higher blood pressure. The authors suggest larger, more diverse networks may already confer some benefit, leaving less room to improve."}
-            </p>
-          </div>
-
-          <p className="u-fine text-chalk-3 border-t border-line-wall pt-4  text-chalk-3">
-            Anchored on real values: slow arrivers averaged 5 contacts at
-            constraint 61, fast arrivers 8 at constraint 40. The blood pressure
-            figures are the trial&rsquo;s two constraint subgroups, p = 0.03; the
-            trial split at its own median, and this dial switches at 61. The
-            drawing and the three numbers above are illustrations, not data.
+          <p className="u-fine border-t border-line-wall pt-4 text-chalk-3">
+            Anchored on group averages from the 2019 study: slow arrivers
+            averaged 5 contacts at constraint 61, fast arrivers 8 at constraint
+            40. The drawing and the three numbers above are illustrations, not
+            patient data.
           </p>
         </div>
       </div>

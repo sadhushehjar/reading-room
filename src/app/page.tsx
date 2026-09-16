@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Hero from "@/components/Hero";
+import Hero, { SiteBar } from "@/components/Hero";
 import Gallery from "@/components/Gallery";
 import ConstraintDial from "@/components/ConstraintDial";
 import ConditionBoard from "@/components/ConditionBoard";
@@ -18,6 +18,9 @@ export default function Page() {
   return (
     <main>
       <Reveal />
+      <SiteBar />
+      {/* the folder reader leads: it is what someone opens this page to use */}
+      <Ingest />
       <Hero />
       <Gallery onOpen={setOpenId} />
       {/* the connection map is off the page for now; <ConnectionMap onOpen={setOpenId} /> restores it */}
@@ -51,7 +54,6 @@ export default function Page() {
         </div>
       </section>
 
-      <Ingest />
       <Synthesis onOpen={setOpenId} />
 
       <footer className="u-shell pb-20 pt-4">

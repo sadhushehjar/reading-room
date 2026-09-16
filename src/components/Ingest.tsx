@@ -148,7 +148,7 @@ export default function Ingest() {
   const totalMin = ok.reduce((n, r) => n + r.minutes, 0);
 
   return (
-    <section id="folder" className="u-shell pb-24 pt-4">
+    <section id="folder" className="u-shell pb-12 pt-0">
       <div className="u-rail pt-10">
         <div className="grid gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
           <div>

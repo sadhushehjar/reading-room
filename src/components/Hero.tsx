@@ -3,25 +3,29 @@
 import MinuteStrip from "./MinuteStrip";
 import { PAPERS } from "@/lib/collection";
 
-export default function Hero() {
+/** The institution line: the room's name, and what is currently on view. */
+export function SiteBar() {
   const years = `${PAPERS[0].year}–${PAPERS[PAPERS.length - 1].year}`;
-
   return (
-    <header className="relative overflow-hidden pb-16 pt-6 sm:pb-24">
+    <header className="u-shell pt-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pb-6">
+        <h1 className="font-display text-[0.95rem] font-700 leading-normal tracking-[0.14em] text-chalk uppercase">
+          Reading&nbsp;Room
+        </h1>
+        <span className="u-label">
+          On view · SocialBit · {PAPERS.length} papers · {years}
+        </span>
+      </div>
+    </header>
+  );
+}
+
+/** The introduction to the collection, placed after the folder section. */
+export default function Hero() {
+  return (
+    <section id="intro" aria-label="Introduction" className="pb-16 pt-4 sm:pb-24">
       <div className="u-shell">
-        {/* the institution line, and what is currently on view */}
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pb-6">
-          <h1 className="font-display text-[0.95rem] font-700 leading-normal tracking-[0.14em] text-chalk uppercase">
-            Reading&nbsp;Room
-          </h1>
-          <span className="u-label">
-            On view · SocialBit · {PAPERS.length} papers · {years}
-          </span>
-        </div>
-
-        <div className="u-rail" />
-
-        <div className="flex flex-col gap-8 pt-12 lg:pt-16">
+        <div className="u-rail flex flex-col gap-8 pt-12 lg:pt-16">
           <p className="max-w-[40ch] font-read text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.4] text-chalk">
             Point this at the folder and every paper comes back as an exhibit:
             what it asked, how it was actually run, the numbers that carry it,
@@ -36,17 +40,11 @@ export default function Hero() {
             >
               Walk the collection
             </a>
-            <a
-              href="#folder"
-              className="border border-line-wall-2 px-6 py-3 font-display text-[0.92rem] font-600 tracking-tight text-chalk transition-colors hover:border-brass hover:text-brass"
-            >
-              Open your own folder
-            </a>
           </div>
         </div>
       </div>
 
-      {/* the first exhibit is the measurement itself */}
+      {/* the measurement itself, drawn as an illustration */}
       <div className="u-shell pt-14 sm:pt-16">
         <div className="u-rail pt-8">
           <MinuteStrip
@@ -70,6 +68,6 @@ export default function Hero() {
           </p>
         </div>
       </div>
-    </header>
+    </section>
   );
 }
