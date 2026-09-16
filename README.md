@@ -15,8 +15,6 @@ interaction after stroke.
 - **The collection.** Eight papers, each readable at three depths — Glance,
   Brief and Full — with a picture, key numbers, method steps, every limitation
   the authors named, and what to read next.
-- **The map.** How the papers connect: which ones share an instrument, answer
-  another's gap, or test another's proposal.
 - **Touch exhibits.** A constraint slider tied to the arrival-time and
   blood-pressure findings, and a panel showing SocialBit's accuracy under each
   reported condition.

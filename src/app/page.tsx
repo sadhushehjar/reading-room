@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
-import ConnectionMap from "@/components/ConnectionMap";
 import ConstraintDial from "@/components/ConstraintDial";
 import ConditionBoard from "@/components/ConditionBoard";
 import Ingest from "@/components/Ingest";
@@ -21,7 +20,7 @@ export default function Page() {
       <Reveal />
       <Hero />
       <Gallery onOpen={setOpenId} />
-      <ConnectionMap onOpen={setOpenId} />
+      {/* the connection map is off the page for now; <ConnectionMap onOpen={setOpenId} /> restores it */}
 
       <section id="touch" className="u-shell pb-24 pt-4">
         <div className="u-rail pt-10">
