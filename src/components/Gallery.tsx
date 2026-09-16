@@ -60,16 +60,8 @@ function Card({
               {paper.glance}
             </p>
 
-            <div className="mt-6 flex items-end justify-between gap-6 border-t border-line-paper pt-4">
-              <div>
-                <div className="u-num text-[1.6rem] font-600 leading-none text-ink">
-                  {paper.headline.value}
-                </div>
-                <div className="mt-1.5 max-w-[28ch] font-display text-[0.82rem] font-600 leading-snug text-ink-3">
-                  {paper.headline.label}
-                </div>
-              </div>
-              <span className="shrink-0 font-mono text-[0.7rem] tracking-[0.14em] text-ink-3 uppercase group-hover:text-ink">
+            <div className="mt-6 border-t border-line-paper pt-4">
+              <span className="font-mono text-[0.7rem] tracking-[0.14em] text-ink-3 uppercase group-hover:text-ink">
                 {paper.minutes} min →
               </span>
             </div>
